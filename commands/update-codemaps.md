@@ -1,17 +1,17 @@
-# Update Codemaps
+# Codemap を更新する
 
-Analyze the codebase structure and update architecture documentation:
+コードベース構成を分析し、アーキテクチャドキュメントを更新する:
 
-1. Scan all source files for imports, exports, and dependencies
-2. Generate token-lean codemaps in the following format:
-   - codemaps/architecture.md - Overall architecture
-   - codemaps/backend.md - Backend structure  
-   - codemaps/frontend.md - Frontend structure
-   - codemaps/data.md - Data models and schemas
+1. すべてのソースファイルをスキャンし、import / export / 依存関係を抽出する
+2. 次の形式で token-lean な codemap を生成する:
+   - codemaps/architecture.md - 全体アーキテクチャ
+   - codemaps/backend.md - バックエンド構成
+   - codemaps/frontend.md - フロントエンド構成
+   - codemaps/data.md - データモデルとスキーマ
 
-3. Calculate diff percentage from previous version
-4. If changes > 30%, request user approval before updating
-5. Add freshness timestamp to each codemap
-6. Save reports to .reports/codemap-diff.txt
+3. 以前のバージョンとの差分率を算出する
+4. 変更が30%を超える場合は、更新前にユーザーの承認を求める
+5. 各 codemap に鮮度タイムスタンプを付与する
+6. レポートを .reports/codemap-diff.txt に保存する
 
-Use TypeScript/Node.js for analysis. Focus on high-level structure, not implementation details.
+分析には TypeScript / Node.js を使用する。実装の詳細ではなく、上位の構造に集中する。

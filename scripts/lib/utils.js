@@ -1,6 +1,6 @@
 /**
- * Cross-platform utility functions for Claude Code hooks and scripts
- * Works on Windows, macOS, and Linux
+ * Claude Code のフックとスクリプト向けクロスプラットフォームユーティリティ
+ * Windows, macOS, Linux で動作する
  */
 
 const fs = require('fs');
@@ -8,48 +8,48 @@ const path = require('path');
 const os = require('os');
 const { execSync, spawnSync } = require('child_process');
 
-// Platform detection
+// プラットフォーム検出
 const isWindows = process.platform === 'win32';
 const isMacOS = process.platform === 'darwin';
 const isLinux = process.platform === 'linux';
 
 /**
- * Get the user's home directory (cross-platform)
+ * ユーザーのホームディレクトリを取得する (クロスプラットフォーム)
  */
 function getHomeDir() {
   return os.homedir();
 }
 
 /**
- * Get the Claude config directory
+ * Claude の設定ディレクトリを取得する
  */
 function getClaudeDir() {
   return path.join(getHomeDir(), '.claude');
 }
 
 /**
- * Get the sessions directory
+ * セッションディレクトリを取得する
  */
 function getSessionsDir() {
   return path.join(getClaudeDir(), 'sessions');
 }
 
 /**
- * Get the learned skills directory
+ * 学習済みスキルのディレクトリを取得する
  */
 function getLearnedSkillsDir() {
   return path.join(getClaudeDir(), 'skills', 'learned');
 }
 
 /**
- * Get the temp directory (cross-platform)
+ * temp ディレクトリを取得する (クロスプラットフォーム)
  */
 function getTempDir() {
   return os.tmpdir();
 }
 
 /**
- * Ensure a directory exists (create if not)
+ * ディレクトリの存在を保証する (なければ作成)
  */
 function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) {
@@ -59,7 +59,7 @@ function ensureDir(dirPath) {
 }
 
 /**
- * Get current date in YYYY-MM-DD format
+ * 現在日付を YYYY-MM-DD 形式で取得する
  */
 function getDateString() {
   const now = new Date();
@@ -70,7 +70,7 @@ function getDateString() {
 }
 
 /**
- * Get current time in HH:MM format
+ * 現在時刻を HH:MM 形式で取得する
  */
 function getTimeString() {
   const now = new Date();
@@ -80,9 +80,9 @@ function getTimeString() {
 }
 
 /**
- * Get short session ID from CLAUDE_SESSION_ID environment variable
- * Returns the last 8 characters for uniqueness with brevity
- * @param {string} fallback - Fallback value if no session ID (default: 'default')
+ * CLAUDE_SESSION_ID 環境変数から短いセッション ID を取得する
+ * 簡潔で一意性を保つため末尾 8 文字を返す
+ * @param {string} fallback - セッション ID がない場合のフォールバック値 (default: 'default')
  */
 function getSessionIdShort(fallback = 'default') {
   const sessionId = process.env.CLAUDE_SESSION_ID;
@@ -93,7 +93,7 @@ function getSessionIdShort(fallback = 'default') {
 }
 
 /**
- * Get current datetime in YYYY-MM-DD HH:MM:SS format
+ * 現在日時を YYYY-MM-DD HH:MM:SS 形式で取得する
  */
 function getDateTimeString() {
   const now = new Date();
@@ -107,10 +107,10 @@ function getDateTimeString() {
 }
 
 /**
- * Find files matching a pattern in a directory (cross-platform alternative to find)
- * @param {string} dir - Directory to search
- * @param {string} pattern - File pattern (e.g., "*.tmp", "*.md")
- * @param {object} options - Options { maxAge: days, recursive: boolean }
+ * ディレクトリ内のパターン一致ファイルを探す (find のクロスプラットフォーム代替)
+ * @param {string} dir - 検索するディレクトリ
+ * @param {string} pattern - ファイルパターン (例: "*.tmp", "*.md")
+ * @param {object} options - オプション { maxAge: days, recursive: boolean }
  */
 function findFiles(dir, pattern, options = {}) {
   const { maxAge = null, recursive = false } = options;
@@ -149,20 +149,20 @@ function findFiles(dir, pattern, options = {}) {
         }
       }
     } catch (err) {
-      // Ignore permission errors
+      // 権限エラーは無視する
     }
   }
 
   searchDir(dir);
 
-  // Sort by modification time (newest first)
+  // 更新時刻でソートする (新しい順)
   results.sort((a, b) => b.mtime - a.mtime);
 
   return results;
 }
 
 /**
- * Read JSON from stdin (for hook input)
+ * stdin から JSON を読み込む (フック入力用)
  */
 async function readStdinJson() {
   return new Promise((resolve, reject) => {
@@ -190,14 +190,14 @@ async function readStdinJson() {
 }
 
 /**
- * Log to stderr (visible to user in Claude Code)
+ * stderr へログ出力する (Claude Code でユーザーに見える)
  */
 function log(message) {
   console.error(message);
 }
 
 /**
- * Output to stdout (returned to Claude)
+ * stdout へ出力する (Claude に返る)
  */
 function output(data) {
   if (typeof data === 'object') {
@@ -208,7 +208,7 @@ function output(data) {
 }
 
 /**
- * Read a text file safely
+ * テキストファイルを安全に読む
  */
 function readFile(filePath) {
   try {
@@ -219,7 +219,7 @@ function readFile(filePath) {
 }
 
 /**
- * Write a text file
+ * テキストファイルを書く
  */
 function writeFile(filePath, content) {
   ensureDir(path.dirname(filePath));
@@ -227,7 +227,7 @@ function writeFile(filePath, content) {
 }
 
 /**
- * Append to a text file
+ * テキストファイルに追記する
  */
 function appendFile(filePath, content) {
   ensureDir(path.dirname(filePath));
@@ -235,18 +235,18 @@ function appendFile(filePath, content) {
 }
 
 /**
- * Check if a command exists in PATH
- * Uses execFileSync to prevent command injection
+ * コマンドが PATH に存在するか確認する
+ * コマンドインジェクション防止のため execFileSync を使う
  */
 function commandExists(cmd) {
-  // Validate command name - only allow alphanumeric, dash, underscore, dot
+  // コマンド名を検証する - 英数字、ハイフン、アンダースコア、ドットのみ許可
   if (!/^[a-zA-Z0-9_.-]+$/.test(cmd)) {
     return false;
   }
 
   try {
     if (isWindows) {
-      // Use spawnSync to avoid shell interpolation
+      // シェル補間を避けるために spawnSync を使う
       const result = spawnSync('where', [cmd], { stdio: 'pipe' });
       return result.status === 0;
     } else {
@@ -259,14 +259,14 @@ function commandExists(cmd) {
 }
 
 /**
- * Run a command and return output
+ * コマンドを実行して出力を返す
  *
- * SECURITY NOTE: This function executes shell commands. Only use with
- * trusted, hardcoded commands. Never pass user-controlled input directly.
- * For user input, use spawnSync with argument arrays instead.
+ * セキュリティ注記: この関数はシェルコマンドを実行する。信頼できる
+ * ハードコードされたコマンドのみ使う。ユーザー入力を直接渡さない。
+ * ユーザー入力には引数配列付きの spawnSync を使う。
  *
- * @param {string} cmd - Command to execute (should be trusted/hardcoded)
- * @param {object} options - execSync options
+ * @param {string} cmd - 実行するコマンド (信頼済み / ハードコード済み)
+ * @param {object} options - execSync オプション
  */
 function runCommand(cmd, options = {}) {
   try {
@@ -282,14 +282,14 @@ function runCommand(cmd, options = {}) {
 }
 
 /**
- * Check if current directory is a git repository
+ * 現在のディレクトリが git リポジトリか確認する
  */
 function isGitRepo() {
   return runCommand('git rev-parse --git-dir').success;
 }
 
 /**
- * Get git modified files
+ * git の変更済みファイルを取得する
  */
 function getGitModifiedFiles(patterns = []) {
   if (!isGitRepo()) return [];
@@ -312,7 +312,7 @@ function getGitModifiedFiles(patterns = []) {
 }
 
 /**
- * Replace text in a file (cross-platform sed alternative)
+ * ファイル内のテキストを置換する (クロスプラットフォーム sed 代替)
  */
 function replaceInFile(filePath, search, replace) {
   const content = readFile(filePath);
@@ -324,7 +324,7 @@ function replaceInFile(filePath, search, replace) {
 }
 
 /**
- * Count occurrences of a pattern in a file
+ * ファイル内のパターン出現回数を数える
  */
 function countInFile(filePath, pattern) {
   const content = readFile(filePath);
@@ -336,7 +336,7 @@ function countInFile(filePath, pattern) {
 }
 
 /**
- * Search for pattern in file and return matching lines with line numbers
+ * ファイル内のパターンを検索し、行番号付きで一致行を返す
  */
 function grepFile(filePath, pattern) {
   const content = readFile(filePath);
@@ -356,12 +356,12 @@ function grepFile(filePath, pattern) {
 }
 
 module.exports = {
-  // Platform info
+  // プラットフォーム情報
   isWindows,
   isMacOS,
   isLinux,
 
-  // Directories
+  // ディレクトリ
   getHomeDir,
   getClaudeDir,
   getSessionsDir,
@@ -369,13 +369,13 @@ module.exports = {
   getTempDir,
   ensureDir,
 
-  // Date/Time
+  // 日付 / 時刻
   getDateString,
   getTimeString,
   getDateTimeString,
   getSessionIdShort,
 
-  // File operations
+  // ファイル操作
   findFiles,
   readFile,
   writeFile,
@@ -384,12 +384,12 @@ module.exports = {
   countInFile,
   grepFile,
 
-  // Hook I/O
+  // フック I/O
   readStdinJson,
   log,
   output,
 
-  // System
+  // システム
   commandExists,
   runCommand,
   isGitRepo,

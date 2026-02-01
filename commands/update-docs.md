@@ -1,31 +1,31 @@
-# Update Documentation
+# ドキュメントを更新する
 
-Sync documentation from source-of-truth:
+正の情報源からドキュメントを同期する:
 
-1. Read package.json scripts section
-   - Generate scripts reference table
-   - Include descriptions from comments
+1. package.json の scripts セクションを読む
+   - scripts 参照テーブルを生成する
+   - コメントから説明を含める
 
-2. Read .env.example
-   - Extract all environment variables
-   - Document purpose and format
+2. .env.example を読む
+   - すべての環境変数を抽出する
+   - 目的と形式を記述する
 
-3. Generate docs/CONTRIB.md with:
-   - Development workflow
-   - Available scripts
-   - Environment setup
-   - Testing procedures
+3. docs/CONTRIB.md を生成する:
+   - 開発ワークフロー
+   - 利用可能なスクリプト
+   - 環境セットアップ
+   - テスト手順
 
-4. Generate docs/RUNBOOK.md with:
-   - Deployment procedures
-   - Monitoring and alerts
-   - Common issues and fixes
-   - Rollback procedures
+4. docs/RUNBOOK.md を生成する:
+   - デプロイ手順
+   - 監視とアラート
+   - よくある問題と修正
+   - ロールバック手順
 
-5. Identify obsolete documentation:
-   - Find docs not modified in 90+ days
-   - List for manual review
+5. 古いドキュメントを特定する:
+   - 90 日以上更新されていない docs を見つける
+   - 手動レビュー用に一覧化する
 
-6. Show diff summary
+6. 差分サマリーを表示する
 
-Single source of truth: package.json and .env.example
+単一の正の情報源: package.json と .env.example

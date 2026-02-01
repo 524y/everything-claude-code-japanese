@@ -1,10 +1,10 @@
 #!/bin/bash
-# Continuous Learning v2 - Observation Hook
+# Continuous Learning v2 - 観測フック
 #
-# Captures tool use events for pattern analysis.
-# Claude Code passes hook data via stdin as JSON.
+# パターン分析のためにツール使用イベントを収集する。
+# Claude Code はフックデータを JSON として stdin から渡す。
 #
-# Hook config (in ~/.claude/settings.json):
+# フック設定（~/.claude/settings.json 内）:
 # {
 #   "hooks": {
 #     "PreToolUse": [{
@@ -24,23 +24,23 @@ CONFIG_DIR="${HOME}/.claude/homunculus"
 OBSERVATIONS_FILE="${CONFIG_DIR}/observations.jsonl"
 MAX_FILE_SIZE_MB=10
 
-# Ensure directory exists
+# ディレクトリが存在することを保証する
 mkdir -p "$CONFIG_DIR"
 
-# Skip if disabled
+# 無効化されている場合はスキップする
 if [ -f "$CONFIG_DIR/disabled" ]; then
   exit 0
 fi
 
-# Read JSON from stdin (Claude Code hook format)
+# stdin から JSON を読み込む（Claude Code のフック形式）
 INPUT_JSON=$(cat)
 
-# Exit if no input
+# 入力がなければ終了する
 if [ -z "$INPUT_JSON" ]; then
   exit 0
 fi
 
-# Parse using python (more reliable than jq for complex JSON)
+# python で解析する（複雑な JSON では jq より信頼できる）
 PARSED=$(python3 << EOF
 import json
 import sys
@@ -48,14 +48,14 @@ import sys
 try:
     data = json.loads('''$INPUT_JSON''')
 
-    # Extract fields - Claude Code hook format
-    hook_type = data.get('hook_type', 'unknown')  # PreToolUse or PostToolUse
+    # フィールドを抽出する - Claude Code のフック形式
+    hook_type = data.get('hook_type', 'unknown')  # PreToolUse または PostToolUse
     tool_name = data.get('tool_name', data.get('tool', 'unknown'))
     tool_input = data.get('tool_input', data.get('input', {}))
     tool_output = data.get('tool_output', data.get('output', ''))
     session_id = data.get('session_id', 'unknown')
 
-    # Truncate large inputs/outputs
+    # 大きな入力 / 出力を切り詰める
     if isinstance(tool_input, dict):
         tool_input_str = json.dumps(tool_input)[:5000]
     else:
@@ -66,7 +66,7 @@ try:
     else:
         tool_output_str = str(tool_output)[:5000]
 
-    # Determine event type
+    # イベント種別を判定する
     event = 'tool_start' if 'Pre' in hook_type else 'tool_complete'
 
     print(json.dumps({
@@ -82,17 +82,17 @@ except Exception as e:
 EOF
 )
 
-# Check if parsing succeeded
+# 解析が成功したか確認する
 PARSED_OK=$(echo "$PARSED" | python3 -c "import json,sys; print(json.load(sys.stdin).get('parsed', False))")
 
 if [ "$PARSED_OK" != "True" ]; then
-  # Fallback: log raw input for debugging
+  # フォールバック: デバッグのために生入力を記録する
   timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   echo "{\"timestamp\":\"$timestamp\",\"event\":\"parse_error\",\"raw\":$(echo "$INPUT_JSON" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()[:1000]))')}" >> "$OBSERVATIONS_FILE"
   exit 0
 fi
 
-# Archive if file too large
+# ファイルが大きすぎる場合はアーカイブする
 if [ -f "$OBSERVATIONS_FILE" ]; then
   file_size_mb=$(du -m "$OBSERVATIONS_FILE" 2>/dev/null | cut -f1)
   if [ "${file_size_mb:-0}" -ge "$MAX_FILE_SIZE_MB" ]; then
@@ -102,7 +102,7 @@ if [ -f "$OBSERVATIONS_FILE" ]; then
   fi
 fi
 
-# Build and write observation
+# 観測データを構築して書き込む
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 python3 << EOF
@@ -125,7 +125,7 @@ with open('$OBSERVATIONS_FILE', 'a') as f:
     f.write(json.dumps(observation) + '\n')
 EOF
 
-# Signal observer if running
+# オブザーバーが動作中なら通知する
 OBSERVER_PID_FILE="${CONFIG_DIR}/.observer.pid"
 if [ -f "$OBSERVER_PID_FILE" ]; then
   observer_pid=$(cat "$OBSERVER_PID_FILE")

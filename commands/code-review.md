@@ -1,40 +1,40 @@
-# Code Review
+# コードレビュー
 
-Comprehensive security and quality review of uncommitted changes:
+未コミットの変更に対して包括的なセキュリティ/品質レビューを行う:
 
-1. Get changed files: git diff --name-only HEAD
+1. 変更されたファイルを取得: git diff --name-only HEAD
 
-2. For each changed file, check for:
+2. 変更された各ファイルについて次を確認:
 
-**Security Issues (CRITICAL):**
-- Hardcoded credentials, API keys, tokens
-- SQL injection vulnerabilities
-- XSS vulnerabilities  
-- Missing input validation
-- Insecure dependencies
-- Path traversal risks
+**セキュリティ問題（CRITICAL）:**
+- ハードコードされた認証情報、API キー、トークン
+- SQL injection の脆弱性
+- XSS の脆弱性
+- 入力検証の不足
+- 安全でない依存関係
+- パストラバーサルのリスク
 
-**Code Quality (HIGH):**
-- Functions > 50 lines
-- Files > 800 lines
-- Nesting depth > 4 levels
-- Missing error handling
-- console.log statements
-- TODO/FIXME comments
-- Missing JSDoc for public APIs
+**コード品質（HIGH）:**
+- 50 行超の関数
+- 800 行超のファイル
+- 4 段超のネスト
+- エラーハンドリング不足
+- console.log の記述
+- TODO/FIXME コメント
+- 公開 API の JSDoc 不足
 
-**Best Practices (MEDIUM):**
-- Mutation patterns (use immutable instead)
-- Emoji usage in code/comments
-- Missing tests for new code
-- Accessibility issues (a11y)
+**ベストプラクティス（MEDIUM）:**
+- 破壊的変更のパターン（immutable を使う）
+- コード / コメント内の絵文字使用
+- 新規コードのテスト不足
+- アクセシビリティ問題（a11y）
 
-3. Generate report with:
-   - Severity: CRITICAL, HIGH, MEDIUM, LOW
-   - File location and line numbers
-   - Issue description
-   - Suggested fix
+3. 次を含むレポートを作成:
+   - 重要度: CRITICAL, HIGH, MEDIUM, LOW
+   - ファイル位置と行番号
+   - 問題の説明
+   - 修正案
 
-4. Block commit if CRITICAL or HIGH issues found
+4. CRITICAL または HIGH が見つかったら commit をブロック
 
-Never approve code with security vulnerabilities!
+セキュリティ脆弱性があるコードは決して承認しないこと!

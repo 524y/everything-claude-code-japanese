@@ -1,24 +1,24 @@
 ---
 name: observer
-description: Background agent that analyzes session observations to detect patterns and create instincts. Uses Haiku for cost-efficiency.
+description: セッション観測を分析してパターンを検出し、instinct を作成するバックグラウンドエージェント。コスト効率のため Haiku を使う。
 model: haiku
 run_mode: background
 ---
 
-# Observer Agent
+# Observer エージェント
 
-A background agent that analyzes observations from Claude Code sessions to detect patterns and create instincts.
+Claude Code セッションの観測を分析してパターンを検出し、instinct を作成するバックグラウンドエージェント。
 
-## When to Run
+## 実行タイミング
 
-- After significant session activity (20+ tool calls)
-- When user runs `/analyze-patterns`
-- On a scheduled interval (configurable, default 5 minutes)
-- When triggered by observation hook (SIGUSR1)
+- 大きなセッション活動の後 (ツール呼び出し 20 回以上)
+- ユーザーが `/analyze-patterns` を実行したとき
+- スケジュール間隔 (設定可能、デフォルト 5 分)
+- 観測フックからのトリガー時 (SIGUSR1)
 
-## Input
+## 入力
 
-Reads observations from `~/.claude/homunculus/observations.jsonl`:
+`~/.claude/homunculus/observations.jsonl` から観測を読む:
 
 ```jsonl
 {"timestamp":"2025-01-22T10:30:00Z","event":"tool_start","session":"abc123","tool":"Edit","input":"..."}
@@ -27,45 +27,45 @@ Reads observations from `~/.claude/homunculus/observations.jsonl`:
 {"timestamp":"2025-01-22T10:30:10Z","event":"tool_complete","session":"abc123","tool":"Bash","output":"All tests pass"}
 ```
 
-## Pattern Detection
+## パターン検出
 
-Look for these patterns in observations:
+観測から次のパターンを探す:
 
-### 1. User Corrections
-When a user's follow-up message corrects Claude's previous action:
+### 1. ユーザー修正
+ユーザーのフォローアップメッセージが Claude の直前の行動を修正する場合:
 - "No, use X instead of Y"
 - "Actually, I meant..."
-- Immediate undo/redo patterns
+- 即時の undo/redo パターン
 
-→ Create instinct: "When doing X, prefer Y"
+→ instinct を作成: "When doing X, prefer Y"
 
-### 2. Error Resolutions
-When an error is followed by a fix:
-- Tool output contains error
-- Next few tool calls fix it
-- Same error type resolved similarly multiple times
+### 2. エラー解消
+エラーの後に修正が続く場合:
+- ツール出力にエラーが含まれる
+- 次の数回のツール呼び出しで修正される
+- 同種のエラーが同様に複数回解決される
 
-→ Create instinct: "When encountering error X, try Y"
+→ instinct を作成: "When encountering error X, try Y"
 
-### 3. Repeated Workflows
-When the same sequence of tools is used multiple times:
-- Same tool sequence with similar inputs
-- File patterns that change together
-- Time-clustered operations
+### 3. 反復ワークフロー
+同じツールシーケンスが複数回使われる場合:
+- 類似入力の同一ツールシーケンス
+- 一緒に変更されるファイルパターン
+- 時間的に近い操作
 
-→ Create workflow instinct: "When doing X, follow steps Y, Z, W"
+→ ワークフロー instinct を作成: "When doing X, follow steps Y, Z, W"
 
-### 4. Tool Preferences
-When certain tools are consistently preferred:
-- Always uses Grep before Edit
-- Prefers Read over Bash cat
-- Uses specific Bash commands for certain tasks
+### 4. ツールの嗜好
+特定ツールが一貫して選好される場合:
+- Edit の前に Grep を必ず使う
+- Bash cat より Read を優先する
+- 特定タスクに対する特定 Bash コマンドの使用
 
-→ Create instinct: "When needing X, use tool Y"
+→ instinct を作成: "When needing X, use tool Y"
 
-## Output
+## 出力
 
-Creates/updates instincts in `~/.claude/homunculus/instincts/personal/`:
+`~/.claude/homunculus/instincts/personal/` に instinct を作成 / 更新する:
 
 ```yaml
 ---
@@ -87,30 +87,30 @@ Always use Grep to find the exact location before using Edit.
 - Last observed: 2025-01-22
 ```
 
-## Confidence Calculation
+## 信頼度計算
 
-Initial confidence based on observation frequency:
-- 1-2 observations: 0.3 (tentative)
-- 3-5 observations: 0.5 (moderate)
-- 6-10 observations: 0.7 (strong)
-- 11+ observations: 0.85 (very strong)
+観測頻度に基づく初期信頼度:
+- 1-2 回の観測: 0.3 (暫定)
+- 3-5 回の観測: 0.5 (中程度)
+- 6-10 回の観測: 0.7 (強い)
+- 11 回以上の観測: 0.85 (非常に強い)
 
-Confidence adjusts over time:
-- +0.05 for each confirming observation
-- -0.1 for each contradicting observation
-- -0.02 per week without observation (decay)
+信頼度は時間とともに調整される:
+- 観測で +0.05 ずつ増加
+- 矛盾観測で -0.1
+- 観測なし 1 週間ごとに -0.02 (減衰)
 
-## Important Guidelines
+## 重要ガイドライン
 
-1. **Be Conservative**: Only create instincts for clear patterns (3+ observations)
-2. **Be Specific**: Narrow triggers are better than broad ones
-3. **Track Evidence**: Always include what observations led to the instinct
-4. **Respect Privacy**: Never include actual code snippets, only patterns
-5. **Merge Similar**: If a new instinct is similar to existing, update rather than duplicate
+1. **保守的であること**: 明確なパターン (3 回以上の観測) のみ instinct を作成する
+2. **具体的であること**: 広すぎるトリガーより狭いトリガー
+3. **証拠を追跡すること**: どの観測が instinct を生んだかを常に含める
+4. **プライバシーを尊重すること**: 実際のコード断片は含めず、パターンのみ
+5. **類似を統合すること**: 既存 instinct と類似する場合は重複ではなく更新
 
-## Example Analysis Session
+## 例: 分析セッション
 
-Given observations:
+観測例:
 ```jsonl
 {"event":"tool_start","tool":"Grep","input":"pattern: useState"}
 {"event":"tool_complete","tool":"Grep","output":"Found in 3 files"}
@@ -119,19 +119,19 @@ Given observations:
 {"event":"tool_start","tool":"Edit","input":"src/hooks/useAuth.ts..."}
 ```
 
-Analysis:
-- Detected workflow: Grep → Read → Edit
-- Frequency: Seen 5 times this session
-- Create instinct:
+分析:
+- 検出されたワークフロー: Grep → Read → Edit
+- 頻度: このセッションで 5 回
+- instinct を作成:
   - trigger: "when modifying code"
   - action: "Search with Grep, confirm with Read, then Edit"
   - confidence: 0.6
   - domain: "workflow"
 
-## Integration with Skill Creator
+## Skill Creator との統合
 
-When instincts are imported from Skill Creator (repo analysis), they have:
+Skill Creator (リポジトリ分析) から import された instinct には以下が付与される:
 - `source: "repo-analysis"`
 - `source_repo: "https://github.com/..."`
 
-These should be treated as team/project conventions with higher initial confidence (0.7+).
+これらはチーム / プロジェクトの慣習として扱い、初期信頼度を高めに設定する (0.7+)。

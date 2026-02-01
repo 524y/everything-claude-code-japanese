@@ -1,42 +1,42 @@
-# Session: API Refactor - Error Handling
-**Date:** 2026-01-19
-**Started:** 10:00
-**Last Updated:** 13:30
+# セッション: API リファクタ - エラー処理
+**日付:** 2026-01-19
+**開始:** 10:00
+**最終更新:** 13:30
 
 ---
 
-## Current State
+## 現在の状況
 
-Standardizing error handling across all API endpoints. Moving from ad-hoc try/catch to centralized error middleware.
+全 API エンドポイントのエラー処理を標準化中。場当たり的な try/catch から集中管理のエラーミドルウェアへ移行している。
 
-### Completed
-- [x] Created AppError class with status codes
-- [x] Built global error handler middleware
-- [x] Migrated `/users` routes to new pattern
-- [x] Migrated `/products` routes
+### 完了
+- [x] ステータスコード付きの AppError クラスを作成
+- [x] グローバルエラーハンドラーのミドルウェアを構築
+- [x] `/users` ルートを新パターンに移行
+- [x] `/products` ルートを移行
 
-### Key Findings
-- 47 endpoints with inconsistent error responses
-- Some returning `{ error: message }`, others `{ message: message }`
-- No consistent HTTP status codes
+### 重要な発見
+- 47 個のエンドポイントでエラーレスポンスが不統一
+- 一部は `{ error: message }` を返し、別の一部は `{ message: message }` を返す
+- HTTP ステータスコードが一貫していない
 
-### Error Response Standard
+### エラーレスポンス標準
 ```javascript
 {
   success: false,
   error: {
     code: 'VALIDATION_ERROR',
     message: 'Email is required',
-    field: 'email'  // optional, for validation errors
+    field: 'email'  // 任意、バリデーションエラー向け
   }
 }
 ```
 
-### Notes for Next Session
-- Migrate remaining routes: `/orders`, `/payments`, `/admin`
-- Add error logging to monitoring service
+### 次セッションのメモ
+- 残りのルートを移行: `/orders`、`/payments`、`/admin`
+- 監視サービスにエラーログを追加する
 
-### Context to Load
+### 読み込むコンテキスト
 ```
 src/middleware/errorHandler.js
 src/utils/AppError.js

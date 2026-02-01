@@ -1,54 +1,54 @@
-# Session: Memory Leak Investigation
-**Date:** 2026-01-17
-**Started:** 09:00
-**Last Updated:** 12:00
+# セッション: メモリリーク調査
+**日付:** 2026-01-17
+**開始:** 09:00
+**最終更新:** 12:00
 
 ---
 
-## Current State
+## 現在の状況
 
-Investigating memory leak in production. Heap growing unbounded over 24h period.
+本番のメモリリークを調査中。24h の間にヒープが無制限に増加している。
 
-### Completed
-- [x] Set up heap snapshots in staging
-- [x] Identified leak source: event listeners not being cleaned up
-- [x] Fixed leak in WebSocket handler
-- [x] Verified fix with 4h soak test
+### 完了
+- [x] ステージングでヒープスナップショットを設定
+- [x] リーク源を特定: イベントリスナーがクリーンアップされていない
+- [x] WebSocket ハンドラーのリークを修正
+- [x] 4h のソークテストで修正を確認
 
-### Root Cause
-WebSocket `onMessage` handlers were being added on reconnect but not removed on disconnect. After ~1000 reconnects, memory grew from 200MB to 2GB.
+### 根本原因
+WebSocket の `onMessage` ハンドラーが再接続時に追加されるが、切断時に削除されていなかった。約 1000 回の再接続の後、メモリが 200MB から 2GB に増加した。
 
-### The Fix
+### 修正
 ```javascript
-// Before (leaking)
+// 変更前（リーク）
 socket.on('connect', () => {
   socket.on('message', handleMessage)
 })
 
-// After (fixed)
+// 変更後（修正済み）
 socket.on('connect', () => {
-  socket.off('message', handleMessage) // Remove old listener first
+  socket.off('message', handleMessage) // 先に古いリスナーを外す
   socket.on('message', handleMessage)
 })
 
-// Even better - use once or cleanup on disconnect
+// さらに良い: once を使うか disconnect でクリーンアップする
 socket.on('disconnect', () => {
   socket.removeAllListeners('message')
 })
 ```
 
-### Debugging Technique Worth Saving
-1. Take heap snapshot at T=0
-2. Force garbage collection: `global.gc()`
-3. Run suspected operation N times
-4. Take heap snapshot at T=1
-5. Compare snapshots - look for objects with count = N
+### 残すべきデバッグ手法
+1. T=0 でヒープスナップショットを取る
+2. 強制 GC: `global.gc()`
+3. 疑わしい操作を N 回実行する
+4. T=1 でヒープスナップショットを取る
+5. スナップショットを比較し、count = N のオブジェクトを探す
 
-### Notes for Next Session
-- Add memory monitoring alert at 1GB threshold
-- Document this debugging pattern for team
+### 次セッションのメモ
+- 1GB 閾値でメモリ監視アラートを追加する
+- このデバッグパターンをチーム向けに文書化する
 
-### Context to Load
+### 読み込むコンテキスト
 ```
 src/services/websocket.js
 ```

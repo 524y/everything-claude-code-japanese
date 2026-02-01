@@ -1,58 +1,58 @@
-# Example Project CLAUDE.md
+# 例: プロジェクト CLAUDE.md
 
-This is an example project-level CLAUDE.md file. Place this in your project root.
+これはプロジェクトレベルの CLAUDE.md の例である。プロジェクトのルートに配置する。
 
-## Project Overview
+## プロジェクト概要
 
-[Brief description of your project - what it does, tech stack]
+[プロジェクトの簡単な説明 - 何をするか、技術スタック]
 
-## Critical Rules
+## 重要ルール
 
-### 1. Code Organization
+### 1. コード構成
 
-- Many small files over few large files
-- High cohesion, low coupling
-- 200-400 lines typical, 800 max per file
-- Organize by feature/domain, not by type
+- 大きなファイルより小さなファイルを多くする
+- 高凝集、低結合
+- 1 ファイルは通常 200-400 行、最大 800 行
+- 型ではなく機能/ドメインで整理する
 
-### 2. Code Style
+### 2. コードスタイル
 
-- No emojis in code, comments, or documentation
-- Immutability always - never mutate objects or arrays
-- No console.log in production code
-- Proper error handling with try/catch
-- Input validation with Zod or similar
+- コード、コメント、ドキュメントに絵文字を入れない
+- 常に不変性 - オブジェクトや配列を変更しない
+- 本番コードに console.log を入れない
+- try/catch で適切にエラー処理する
+- Zod などで入力バリデーションを行う
 
-### 3. Testing
+### 3. テスト
 
-- TDD: Write tests first
-- 80% minimum coverage
-- Unit tests for utilities
-- Integration tests for APIs
-- E2E tests for critical flows
+- TDD: テストを先に書く
+- 最低80%のカバレッジ
+- ユーティリティのユニットテスト
+- API の統合テスト
+- 重要フローの E2E テスト
 
-### 4. Security
+### 4. セキュリティ
 
-- No hardcoded secrets
-- Environment variables for sensitive data
-- Validate all user inputs
-- Parameterized queries only
-- CSRF protection enabled
+- シークレットをハードコードしない
+- 機密データは環境変数で扱う
+- すべてのユーザー入力を検証する
+- パラメータ化クエリのみ使用する
+- CSRF 保護を有効にする
 
-## File Structure
+## ファイル構成
 
 ```
 src/
 |-- app/              # Next.js app router
-|-- components/       # Reusable UI components
-|-- hooks/            # Custom React hooks
-|-- lib/              # Utility libraries
-|-- types/            # TypeScript definitions
+|-- components/       # 再利用可能な UI コンポーネント
+|-- hooks/            # カスタム React hooks
+|-- lib/              # ユーティリティライブラリ
+|-- types/            # TypeScript 定義
 ```
 
-## Key Patterns
+## 主要パターン
 
-### API Response Format
+### API レスポンス形式
 
 ```typescript
 interface ApiResponse<T> {
@@ -62,7 +62,7 @@ interface ApiResponse<T> {
 }
 ```
 
-### Error Handling
+### エラー処理
 
 ```typescript
 try {
@@ -74,27 +74,27 @@ try {
 }
 ```
 
-## Environment Variables
+## 環境変数
 
 ```bash
-# Required
+# 必須
 DATABASE_URL=
 API_KEY=
 
-# Optional
+# 任意
 DEBUG=false
 ```
 
-## Available Commands
+## 利用可能なコマンド
 
-- `/tdd` - Test-driven development workflow
-- `/plan` - Create implementation plan
-- `/code-review` - Review code quality
-- `/build-fix` - Fix build errors
+- `/tdd` - テスト駆動開発ワークフロー
+- `/plan` - 実装計画を作成する
+- `/code-review` - コード品質をレビューする
+- `/build-fix` - ビルドエラーを修正する
 
-## Git Workflow
+## Git ワークフロー
 
 - Conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`
-- Never commit to main directly
-- PRs require review
-- All tests must pass before merge
+- main に直接コミットしない
+- PR にはレビューが必要
+- マージ前にすべてのテストを通す

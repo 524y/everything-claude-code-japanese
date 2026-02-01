@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Package Manager Setup Script
+ * パッケージマネージャー設定スクリプト
  *
- * Interactive script to configure preferred package manager.
- * Can be run directly or via the /setup-pm command.
+ * 優先パッケージマネージャーを設定する対話スクリプト。
+ * 直接実行、または /setup-pm コマンド経由で実行できる。
  *
- * Usage:
+ * 使用方法:
  *   node scripts/setup-package-manager.js [pm-name]
  *   node scripts/setup-package-manager.js --detect
  *   node scripts/setup-package-manager.js --global pnpm
@@ -155,7 +155,7 @@ function setProject(pmName) {
   }
 }
 
-// Main
+// メイン
 const args = process.argv.slice(2);
 
 if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
@@ -195,7 +195,7 @@ if (projectIdx !== -1) {
   process.exit(0);
 }
 
-// If just a package manager name is provided, set it globally
+// パッケージマネージャー名だけが渡された場合はグローバルに設定する
 const pmName = args[0];
 if (PACKAGE_MANAGERS[pmName]) {
   setGlobal(pmName);

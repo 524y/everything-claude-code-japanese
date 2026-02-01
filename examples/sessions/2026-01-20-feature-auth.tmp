@@ -1,44 +1,44 @@
-# Session: Auth Feature Implementation
-**Date:** 2026-01-20
-**Started:** 14:30
-**Last Updated:** 17:45
+# セッション: 認証機能の実装
+**日付:** 2026-01-20
+**開始:** 14:30
+**最終更新:** 17:45
 
 ---
 
-## Current State
+## 現在の状況
 
-Working on JWT authentication flow for the API. Main goal is replacing session-based auth with stateless tokens.
+API の JWT 認証フローを作業中。主目的はセッションベースの認証をステートレスなトークンに置き換えること。
 
-### Completed
-- [x] Set up JWT signing with RS256
-- [x] Created `/auth/login` endpoint
-- [x] Added refresh token rotation
-- [x] Fixed token expiry bug (was using seconds, needed milliseconds)
+### 完了
+- [x] RS256 で JWT 署名を設定
+- [x] `/auth/login` エンドポイントを作成
+- [x] リフレッシュトークンのローテーションを追加
+- [x] トークン期限のバグを修正（秒で扱っていたが、ミリ秒が必要だった）
 
-### In Progress
-- [ ] Add rate limiting to auth endpoints
-- [ ] Implement token blacklist for logout
+### 進行中
+- [ ] 認証エンドポイントにレートリミットを追加
+- [ ] ログアウト用のトークンブラックリストを実装
 
-### Blockers Encountered
-1. **jsonwebtoken version mismatch** - v9.x changed the `verify()` signature, had to update error handling
-2. **Redis TTL for refresh tokens** - Was setting TTL in seconds but passing milliseconds
+### 発生したブロッカー
+1. **jsonwebtoken のバージョン不一致** - v9.x で `verify()` のシグネチャが変わり、エラーハンドリングを更新する必要があった
+2. **リフレッシュトークンの Redis TTL** - TTL を秒で設定するつもりがミリ秒を渡していた
 
-### Key Decisions Made
-- Using RS256 over HS256 for better security with distributed services
-- Storing refresh tokens in Redis with 7-day TTL
-- Access tokens expire in 15 minutes
+### 重要な意思決定
+- 分散サービスでの安全性向上のため、HS256 ではなく RS256 を使う
+- リフレッシュトークンは Redis に 7 日 TTL で保存する
+- アクセストークンは 15 分で失効する
 
-### Code Locations Modified
-- `src/middleware/auth.js` - JWT verification middleware
-- `src/routes/auth.js` - Login/logout/refresh endpoints
-- `src/services/token.service.js` - Token generation and validation
+### 変更したコードの場所
+- `src/middleware/auth.js` - JWT 検証ミドルウェア
+- `src/routes/auth.js` - ログイン/ログアウト/リフレッシュのエンドポイント
+- `src/services/token.service.js` - トークン生成と検証
 
-### Notes for Next Session
-- Need to add CSRF protection for cookie-based token storage
-- Consider adding fingerprinting for refresh token binding
-- Review rate limit values with team
+### 次セッションのメモ
+- Cookie ベースのトークン保存に CSRF 保護を追加する
+- リフレッシュトークンのバインドにフィンガープリントを検討する
+- レートリミット値をチームでレビューする
 
-### Context to Load
+### 読み込むコンテキスト
 ```
 src/middleware/
 src/routes/auth.js
@@ -47,30 +47,30 @@ src/services/token.service.js
 
 ---
 
-## Session Log
+## セッションログ
 
-**14:30** - Started session, goal is JWT implementation
+**14:30** - セッション開始、目的は JWT 実装
 
-**14:45** - Set up basic JWT signing. Using RS256 with key pair stored in env vars.
+**14:45** - 基本的な JWT 署名を設定。環境変数に保存した鍵ペアで RS256 を使用。
 
-**15:20** - Login endpoint working. Discovered jsonwebtoken v9 breaking change - `verify()` now throws different error types. Updated catch block:
+**15:20** - ログインエンドポイントが動作。jsonwebtoken v9 の破壊的変更を発見 - `verify()` が別のエラー型を投げるようになっていた。catch ブロックを更新:
 ```javascript
-// Old (v8)
+// 旧版（v8）
 if (err.name === 'TokenExpiredError') { ... }
 
-// New (v9)
+// 新版（v9）
 if (err instanceof jwt.TokenExpiredError) { ... }
 ```
 
-**16:00** - Refresh token rotation working but tokens expiring immediately. Bug: was passing `Date.now()` (milliseconds) to `expiresIn` which expects seconds. Fixed:
+**16:00** - リフレッシュトークンのローテーションは動作したが、トークンが即時失効。バグ: `expiresIn` が秒を期待するのに `Date.now()`（ミリ秒）を渡していた。修正:
 ```javascript
-// Wrong
+// 誤り
 expiresIn: Date.now() + 900000
 
-// Correct
+// 正しい
 expiresIn: '15m'
 ```
 
-**17:30** - Auth flow complete. Login -> access token -> refresh -> new tokens. Ready for rate limiting tomorrow.
+**17:30** - 認証フロー完了。ログイン -> アクセストークン -> リフレッシュ -> 新しいトークン。明日レートリミットを追加する準備ができた。
 
-**17:45** - Saving session state.
+**17:45** - セッション状態を保存。

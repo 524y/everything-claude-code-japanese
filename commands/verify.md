@@ -1,39 +1,39 @@
-# Verification Command
+# Verification コマンド
 
-Run comprehensive verification on current codebase state.
+現在のコードベースの状態に対して包括的な検証を実行する。
 
-## Instructions
+## 指示
 
-Execute verification in this exact order:
+次の順序を厳守して検証を実行する:
 
-1. **Build Check**
-   - Run the build command for this project
-   - If it fails, report errors and STOP
+1. **ビルドチェック**
+   - このプロジェクトのビルドコマンドを実行する
+   - 失敗した場合はエラーを報告して停止する
 
-2. **Type Check**
-   - Run TypeScript/type checker
-   - Report all errors with file:line
+2. **型チェック**
+   - TypeScript/type checker を実行する
+   - file:line 付きで全エラーを報告する
 
-3. **Lint Check**
-   - Run linter
-   - Report warnings and errors
+3. **Lint チェック**
+   - linter を実行する
+   - warning と error を報告する
 
-4. **Test Suite**
-   - Run all tests
-   - Report pass/fail count
-   - Report coverage percentage
+4. **テストスイート**
+   - 全テストを実行する
+   - pass/fail の件数を報告する
+   - coverage の割合を報告する
 
-5. **Console.log Audit**
-   - Search for console.log in source files
-   - Report locations
+5. **Console.log 監査**
+   - source ファイル内の console.log を検索する
+   - 位置を報告する
 
-6. **Git Status**
-   - Show uncommitted changes
-   - Show files modified since last commit
+6. **Git ステータス**
+   - 未コミットの変更を表示する
+   - 最後のコミット以降に変更されたファイルを表示する
 
-## Output
+## 出力
 
-Produce a concise verification report:
+簡潔な検証レポートを出力する:
 
 ```
 VERIFICATION: [PASS/FAIL]
@@ -48,12 +48,12 @@ Logs:     [OK/X console.logs]
 Ready for PR: [YES/NO]
 ```
 
-If any critical issues, list them with fix suggestions.
+重大な問題がある場合は、修正案を添えて列挙する。
 
-## Arguments
+## 引数
 
-$ARGUMENTS can be:
-- `quick` - Only build + types
-- `full` - All checks (default)
-- `pre-commit` - Checks relevant for commits
-- `pre-pr` - Full checks plus security scan
+$ARGUMENTS に指定できる値:
+- `quick` - build と types のみ
+- `full` - 全チェック（デフォルト）
+- `pre-commit` - commit 向けのチェック
+- `pre-pr` - security scan を追加したフルチェック

@@ -1,46 +1,46 @@
-# Hooks System
+# フックシステム
 
-## Hook Types
+## フック種別
 
-- **PreToolUse**: Before tool execution (validation, parameter modification)
-- **PostToolUse**: After tool execution (auto-format, checks)
-- **Stop**: When session ends (final verification)
+- **PreToolUse**: ツール実行前 (バリデーション、パラメータ変更)
+- **PostToolUse**: ツール実行後 (自動フォーマット、チェック)
+- **Stop**: セッション終了時 (最終検証)
 
-## Current Hooks (in ~/.claude/settings.json)
+## 現在のフック (~/.claude/settings.json 内)
 
 ### PreToolUse
-- **tmux reminder**: Suggests tmux for long-running commands (npm, pnpm, yarn, cargo, etc.)
-- **git push review**: Opens Zed for review before push
-- **doc blocker**: Blocks creation of unnecessary .md/.txt files
+- **tmux reminder**: 長時間実行コマンドに tmux を提案する (npm, pnpm, yarn, cargo など)
+- **git push review**: push 前に Zed を開いてレビューする
+- **doc blocker**: 不要な .md/.txt ファイルの作成をブロックする
 
 ### PostToolUse
-- **PR creation**: Logs PR URL and GitHub Actions status
-- **Prettier**: Auto-formats JS/TS files after edit
-- **TypeScript check**: Runs tsc after editing .ts/.tsx files
-- **console.log warning**: Warns about console.log in edited files
+- **PR creation**: PR の URL と GitHub Actions の状態を記録する
+- **Prettier**: 編集後に JS/TS ファイルを自動フォーマットする
+- **TypeScript check**: .ts/.tsx ファイルの編集後に tsc を実行する
+- **console.log warning**: 編集したファイル内の console.log を警告する
 
 ### Stop
-- **console.log audit**: Checks all modified files for console.log before session ends
+- **console.log audit**: セッション終了前に変更済みファイルの console.log を全チェックする
 
-## Auto-Accept Permissions
+## 自動承認権限
 
-Use with caution:
-- Enable for trusted, well-defined plans
-- Disable for exploratory work
-- Never use dangerously-skip-permissions flag
-- Configure `allowedTools` in `~/.claude.json` instead
+注意して使用する:
+- 信頼でき、明確に定義された計画で有効化する
+- 探索的な作業では無効化する
+- dangerously-skip-permissions フラグは絶対に使わない
+- 代わりに `~/.claude.json` の `allowedTools` を設定する
 
-## TodoWrite Best Practices
+## TodoWrite ベストプラクティス
 
-Use TodoWrite tool to:
-- Track progress on multi-step tasks
-- Verify understanding of instructions
-- Enable real-time steering
-- Show granular implementation steps
+TodoWrite ツールを使って:
+- 複数ステップのタスク進捗を追跡する
+- 指示の理解を検証する
+- リアルタイムの舵取りを可能にする
+- 粒度の細かい実装ステップを見せる
 
-Todo list reveals:
-- Out of order steps
-- Missing items
-- Extra unnecessary items
-- Wrong granularity
-- Misinterpreted requirements
+Todo リストで分かること:
+- 手順の順序ミス
+- 抜け漏れ
+- 余計な項目
+- 粒度の誤り
+- 要件の誤解

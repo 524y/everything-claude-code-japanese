@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /**
- * PreCompact Hook - Save state before context compaction
+ * PreCompact フック - コンテキスト圧縮前に状態を保存する
  *
- * Cross-platform (Windows, macOS, Linux)
+ * クロスプラットフォーム (Windows, macOS, Linux)
  *
- * Runs before Claude compacts context, giving you a chance to
- * preserve important state that might get lost in summarization.
+ * Claude がコンテキストを圧縮する前に実行し、
+ * 要約で失われる可能性のある重要な状態を
+ * 保存する機会を提供する。
  */
 
 const path = require('path');
@@ -25,11 +26,11 @@ async function main() {
 
   ensureDir(sessionsDir);
 
-  // Log compaction event with timestamp
+  // タイムスタンプ付きで圧縮イベントを記録する
   const timestamp = getDateTimeString();
   appendFile(compactionLog, `[${timestamp}] Context compaction triggered\n`);
 
-  // If there's an active session file, note the compaction
+  // アクティブなセッションファイルがあれば圧縮を記録する
   const sessions = findFiles(sessionsDir, '*.tmp');
 
   if (sessions.length > 0) {

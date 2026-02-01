@@ -1,49 +1,49 @@
-# Agent Orchestration
+# エージェントオーケストレーション
 
-## Available Agents
+## 利用可能なエージェント
 
-Located in `~/.claude/agents/`:
+配置先は `~/.claude/agents/` である:
 
-| Agent | Purpose | When to Use |
+| エージェント | 目的 | 使用タイミング |
 |-------|---------|-------------|
-| planner | Implementation planning | Complex features, refactoring |
-| architect | System design | Architectural decisions |
-| tdd-guide | Test-driven development | New features, bug fixes |
-| code-reviewer | Code review | After writing code |
-| security-reviewer | Security analysis | Before commits |
-| build-error-resolver | Fix build errors | When build fails |
-| e2e-runner | E2E testing | Critical user flows |
-| refactor-cleaner | Dead code cleanup | Code maintenance |
-| doc-updater | Documentation | Updating docs |
+| planner | 実装計画 | 複雑な機能、リファクタリング |
+| architect | システム設計 | アーキテクチャ決定 |
+| tdd-guide | テスト駆動開発 | 新機能、バグ修正 |
+| code-reviewer | コードレビュー | コードを書いた後 |
+| security-reviewer | セキュリティ分析 | コミット前 |
+| build-error-resolver | ビルドエラー修正 | ビルド失敗時 |
+| e2e-runner | E2E テスト | 重要なユーザーフロー |
+| refactor-cleaner | デッドコード整理 | コード保守 |
+| doc-updater | ドキュメント | ドキュメント更新 |
 
-## Immediate Agent Usage
+## 即時のエージェント利用
 
-No user prompt needed:
-1. Complex feature requests - Use **planner** agent
-2. Code just written/modified - Use **code-reviewer** agent
-3. Bug fix or new feature - Use **tdd-guide** agent
-4. Architectural decision - Use **architect** agent
+ユーザーのプロンプトは不要である:
+1. 複雑な機能要求 - **planner** エージェントを使う
+2. コードを書いた/変更した直後 - **code-reviewer** エージェントを使う
+3. バグ修正または新機能 - **tdd-guide** エージェントを使う
+4. アーキテクチャ決定 - **architect** エージェントを使う
 
-## Parallel Task Execution
+## 並列タスク実行
 
-ALWAYS use parallel Task execution for independent operations:
+独立した作業には常に parallel Task 実行を使うこと:
 
 ```markdown
 # GOOD: Parallel execution
-Launch 3 agents in parallel:
-1. Agent 1: Security analysis of auth.ts
-2. Agent 2: Performance review of cache system
-3. Agent 3: Type checking of utils.ts
+3 つのエージェントを並列で起動する:
+1. エージェント 1: auth.ts のセキュリティ分析
+2. エージェント 2: キャッシュシステムのパフォーマンスレビュー
+3. エージェント 3: utils.ts の型チェック
 
 # BAD: Sequential when unnecessary
-First agent 1, then agent 2, then agent 3
+エージェント 1 の後にエージェント 2、さらにエージェント 3
 ```
 
-## Multi-Perspective Analysis
+## 多面的分析
 
-For complex problems, use split role sub-agents:
-- Factual reviewer
-- Senior engineer
-- Security expert
-- Consistency reviewer
-- Redundancy checker
+複雑な問題では役割分割したサブエージェントを使う:
+- 事実確認者
+- シニアエンジニア
+- セキュリティ専門家
+- 一貫性レビュー担当
+- 冗長性チェック担当

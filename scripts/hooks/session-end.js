@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Stop Hook (Session End) - Persist learnings when session ends
+ * Stop フック (セッション終了) - セッション終了時に学びを永続化する
  *
- * Cross-platform (Windows, macOS, Linux)
+ * クロスプラットフォーム (Windows, macOS, Linux)
  *
- * Runs when Claude session ends. Creates/updates session log file
- * with timestamp for continuity tracking.
+ * Claude セッション終了時に実行する。セッションログファイルを作成 / 更新し、
+ * 連続性追跡のためにタイムスタンプを付ける。
  */
 
 const path = require('path');
@@ -26,14 +26,14 @@ async function main() {
   const sessionsDir = getSessionsDir();
   const today = getDateString();
   const shortId = getSessionIdShort();
-  // Include session ID in filename for unique per-session tracking
+  // セッション ID をファイル名に含め、セッションごとに一意の追跡を行う
   const sessionFile = path.join(sessionsDir, `${today}-${shortId}-session.tmp`);
 
   ensureDir(sessionsDir);
 
   const currentTime = getTimeString();
 
-  // If session file exists for today, update the end time
+  // 今日のセッションファイルが存在する場合は終了時刻を更新する
   if (fs.existsSync(sessionFile)) {
     const success = replaceInFile(
       sessionFile,
@@ -45,7 +45,7 @@ async function main() {
       log(`[SessionEnd] Updated session file: ${sessionFile}`);
     }
   } else {
-    // Create new session file with template
+    // テンプレート付きの新規セッションファイルを作成する
     const template = `# Session: ${today}
 **Date:** ${today}
 **Started:** ${currentTime}

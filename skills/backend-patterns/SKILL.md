@@ -1,33 +1,33 @@
 ---
 name: backend-patterns
-description: Backend architecture patterns, API design, database optimization, and server-side best practices for Node.js, Express, and Next.js API routes.
+description: Node.js、Express、Next.js の API routes 向けのバックエンドアーキテクチャパターン、API 設計、データベース最適化、サーバーサイドのベストプラクティス。
 ---
 
-# Backend Development Patterns
+# バックエンド開発パターン
 
-Backend architecture patterns and best practices for scalable server-side applications.
+スケーラブルなサーバーサイドアプリケーションのためのバックエンドアーキテクチャパターンとベストプラクティスである。
 
-## API Design Patterns
+## API 設計パターン
 
-### RESTful API Structure
+### RESTful API 構造
 
 ```typescript
-// ✅ Resource-based URLs
-GET    /api/markets                 # List resources
-GET    /api/markets/:id             # Get single resource
-POST   /api/markets                 # Create resource
-PUT    /api/markets/:id             # Replace resource
-PATCH  /api/markets/:id             # Update resource
-DELETE /api/markets/:id             # Delete resource
+// ✅ リソースベースの URL
+GET    /api/markets                 # リソース一覧
+GET    /api/markets/:id             # 単一リソース取得
+POST   /api/markets                 # リソース作成
+PUT    /api/markets/:id             # リソース置換
+PATCH  /api/markets/:id             # リソース更新
+DELETE /api/markets/:id             # リソース削除
 
-// ✅ Query parameters for filtering, sorting, pagination
+// ✅ フィルタリング、ソート、ページネーション用のクエリパラメータ
 GET /api/markets?status=active&sort=volume&limit=20&offset=0
 ```
 
-### Repository Pattern
+### リポジトリパターン
 
 ```typescript
-// Abstract data access logic
+// データアクセスロジックの抽象化
 interface MarketRepository {
   findAll(filters?: MarketFilters): Promise<Market[]>
   findById(id: string): Promise<Market | null>
@@ -54,26 +54,26 @@ class SupabaseMarketRepository implements MarketRepository {
     return data
   }
 
-  // Other methods...
+  // 他のメソッド...
 }
 ```
 
-### Service Layer Pattern
+### サービスレイヤーパターン
 
 ```typescript
-// Business logic separated from data access
+// ビジネスロジックをデータアクセスから分離
 class MarketService {
   constructor(private marketRepo: MarketRepository) {}
 
   async searchMarkets(query: string, limit: number = 10): Promise<Market[]> {
-    // Business logic
+    // ビジネスロジック
     const embedding = await generateEmbedding(query)
     const results = await this.vectorSearch(embedding, limit)
 
-    // Fetch full data
+    // 完全なデータを取得
     const markets = await this.marketRepo.findByIds(results.map(r => r.id))
 
-    // Sort by similarity
+    // 類似度でソート
     return markets.sort((a, b) => {
       const scoreA = results.find(r => r.id === a.id)?.score || 0
       const scoreB = results.find(r => r.id === b.id)?.score || 0
@@ -82,15 +82,15 @@ class MarketService {
   }
 
   private async vectorSearch(embedding: number[], limit: number) {
-    // Vector search implementation
+    // ベクトル検索の実装
   }
 }
 ```
 
-### Middleware Pattern
+### ミドルウェアパターン
 
 ```typescript
-// Request/response processing pipeline
+// リクエスト/レスポンス処理パイプライン
 export function withAuth(handler: NextApiHandler): NextApiHandler {
   return async (req, res) => {
     const token = req.headers.authorization?.replace('Bearer ', '')
@@ -109,18 +109,18 @@ export function withAuth(handler: NextApiHandler): NextApiHandler {
   }
 }
 
-// Usage
+// 使い方
 export default withAuth(async (req, res) => {
-  // Handler has access to req.user
+  // ハンドラーは req.user にアクセスできる
 })
 ```
 
-## Database Patterns
+## データベースパターン
 
-### Query Optimization
+### クエリ最適化
 
 ```typescript
-// ✅ GOOD: Select only needed columns
+// ✅ GOOD: 必要なカラムだけを選択
 const { data } = await supabase
   .from('markets')
   .select('id, name, status, volume')
@@ -128,25 +128,25 @@ const { data } = await supabase
   .order('volume', { ascending: false })
   .limit(10)
 
-// ❌ BAD: Select everything
+// ❌ BAD: すべて選択
 const { data } = await supabase
   .from('markets')
   .select('*')
 ```
 
-### N+1 Query Prevention
+### N+1 クエリ防止
 
 ```typescript
-// ❌ BAD: N+1 query problem
+// ❌ BAD: N+1 クエリ問題
 const markets = await getMarkets()
 for (const market of markets) {
-  market.creator = await getUser(market.creator_id)  // N queries
+  market.creator = await getUser(market.creator_id)  // N クエリ
 }
 
-// ✅ GOOD: Batch fetch
+// ✅ GOOD: バッチ取得
 const markets = await getMarkets()
 const creatorIds = markets.map(m => m.creator_id)
-const creators = await getUsers(creatorIds)  // 1 query
+const creators = await getUsers(creatorIds)  // 1 クエリ
 const creatorMap = new Map(creators.map(c => [c.id, c]))
 
 markets.forEach(market => {
@@ -154,14 +154,14 @@ markets.forEach(market => {
 })
 ```
 
-### Transaction Pattern
+### トランザクションパターン
 
 ```typescript
 async function createMarketWithPosition(
   marketData: CreateMarketDto,
   positionData: CreatePositionDto
 ) {
-  // Use Supabase transaction
+  // Supabase トランザクションを使用
   const { data, error } = await supabase.rpc('create_market_with_position', {
     market_data: marketData,
     position_data: positionData
@@ -171,7 +171,7 @@ async function createMarketWithPosition(
   return data
 }
 
-// SQL function in Supabase
+// Supabase の SQL 関数
 CREATE OR REPLACE FUNCTION create_market_with_position(
   market_data jsonb,
   position_data jsonb
@@ -180,21 +180,21 @@ RETURNS jsonb
 LANGUAGE plpgsql
 AS $$
 BEGIN
-  -- Start transaction automatically
+  -- トランザクションは自動で開始
   INSERT INTO markets VALUES (market_data);
   INSERT INTO positions VALUES (position_data);
   RETURN jsonb_build_object('success', true);
 EXCEPTION
   WHEN OTHERS THEN
-    -- Rollback happens automatically
+    -- ロールバックは自動で行われる
     RETURN jsonb_build_object('success', false, 'error', SQLERRM);
 END;
 $$;
 ```
 
-## Caching Strategies
+## キャッシュ戦略
 
-### Redis Caching Layer
+### Redis キャッシュレイヤー
 
 ```typescript
 class CachedMarketRepository implements MarketRepository {
@@ -204,18 +204,18 @@ class CachedMarketRepository implements MarketRepository {
   ) {}
 
   async findById(id: string): Promise<Market | null> {
-    // Check cache first
+    // まずキャッシュを確認
     const cached = await this.redis.get(`market:${id}`)
 
     if (cached) {
       return JSON.parse(cached)
     }
 
-    // Cache miss - fetch from database
+    // キャッシュミス - データベースから取得
     const market = await this.baseRepo.findById(id)
 
     if (market) {
-      // Cache for 5 minutes
+      // 5 分間キャッシュ
       await this.redis.setex(`market:${id}`, 300, JSON.stringify(market))
     }
 
@@ -228,31 +228,31 @@ class CachedMarketRepository implements MarketRepository {
 }
 ```
 
-### Cache-Aside Pattern
+### キャッシュアサイドパターン
 
 ```typescript
 async function getMarketWithCache(id: string): Promise<Market> {
   const cacheKey = `market:${id}`
 
-  // Try cache
+  // キャッシュを試す
   const cached = await redis.get(cacheKey)
   if (cached) return JSON.parse(cached)
 
-  // Cache miss - fetch from DB
+  // キャッシュミス - DB から取得
   const market = await db.markets.findUnique({ where: { id } })
 
   if (!market) throw new Error('Market not found')
 
-  // Update cache
+  // キャッシュを更新
   await redis.setex(cacheKey, 300, JSON.stringify(market))
 
   return market
 }
 ```
 
-## Error Handling Patterns
+## エラー処理パターン
 
-### Centralized Error Handler
+### 集中エラーハンドラー
 
 ```typescript
 class ApiError extends Error {
@@ -282,7 +282,7 @@ export function errorHandler(error: unknown, req: Request): Response {
     }, { status: 400 })
   }
 
-  // Log unexpected errors
+  // 予期しないエラーをログ
   console.error('Unexpected error:', error)
 
   return NextResponse.json({
@@ -291,7 +291,7 @@ export function errorHandler(error: unknown, req: Request): Response {
   }, { status: 500 })
 }
 
-// Usage
+// 使い方
 export async function GET(request: Request) {
   try {
     const data = await fetchData()
@@ -302,7 +302,7 @@ export async function GET(request: Request) {
 }
 ```
 
-### Retry with Exponential Backoff
+### 指数バックオフでのリトライ
 
 ```typescript
 async function fetchWithRetry<T>(
@@ -318,7 +318,7 @@ async function fetchWithRetry<T>(
       lastError = error as Error
 
       if (i < maxRetries - 1) {
-        // Exponential backoff: 1s, 2s, 4s
+        // 指数バックオフ: 1s, 2s, 4s
         const delay = Math.pow(2, i) * 1000
         await new Promise(resolve => setTimeout(resolve, delay))
       }
@@ -328,13 +328,13 @@ async function fetchWithRetry<T>(
   throw lastError!
 }
 
-// Usage
+// 使い方
 const data = await fetchWithRetry(() => fetchFromAPI())
 ```
 
-## Authentication & Authorization
+## 認証と認可
 
-### JWT Token Validation
+### JWT トークン検証
 
 ```typescript
 import jwt from 'jsonwebtoken'
@@ -364,7 +364,7 @@ export async function requireAuth(request: Request) {
   return verifyToken(token)
 }
 
-// Usage in API route
+// API route での使い方
 export async function GET(request: Request) {
   const user = await requireAuth(request)
 
@@ -374,7 +374,7 @@ export async function GET(request: Request) {
 }
 ```
 
-### Role-Based Access Control
+### ロールベースのアクセス制御
 
 ```typescript
 type Permission = 'read' | 'write' | 'delete' | 'admin'
@@ -408,18 +408,18 @@ export function requirePermission(permission: Permission) {
   }
 }
 
-// Usage - HOF wraps the handler
+// 使い方 - HOF がハンドラーをラップ
 export const DELETE = requirePermission('delete')(
   async (request: Request, user: User) => {
-    // Handler receives authenticated user with verified permission
+    // ハンドラーは認証済みユーザーと権限確認済みの情報を受け取る
     return new Response('Deleted', { status: 200 })
   }
 )
 ```
 
-## Rate Limiting
+## レート制限
 
-### Simple In-Memory Rate Limiter
+### シンプルなインメモリレートリミッター
 
 ```typescript
 class RateLimiter {
@@ -433,14 +433,14 @@ class RateLimiter {
     const now = Date.now()
     const requests = this.requests.get(identifier) || []
 
-    // Remove old requests outside window
+    // ウィンドウ外の古いリクエストを削除
     const recentRequests = requests.filter(time => now - time < windowMs)
 
     if (recentRequests.length >= maxRequests) {
-      return false  // Rate limit exceeded
+      return false  // レート制限超過
     }
 
-    // Add current request
+    // 現在のリクエストを追加
     recentRequests.push(now)
     this.requests.set(identifier, recentRequests)
 
@@ -453,7 +453,7 @@ const limiter = new RateLimiter()
 export async function GET(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || 'unknown'
 
-  const allowed = await limiter.checkLimit(ip, 100, 60000)  // 100 req/min
+  const allowed = await limiter.checkLimit(ip, 100, 60000)  // 1 分あたり 100 リクエスト
 
   if (!allowed) {
     return NextResponse.json({
@@ -461,13 +461,13 @@ export async function GET(request: Request) {
     }, { status: 429 })
   }
 
-  // Continue with request
+  // リクエストを継続
 }
 ```
 
-## Background Jobs & Queues
+## バックグラウンドジョブとキュー
 
-### Simple Queue Pattern
+### シンプルなキューパターン
 
 ```typescript
 class JobQueue<T> {
@@ -499,11 +499,11 @@ class JobQueue<T> {
   }
 
   private async execute(job: T): Promise<void> {
-    // Job execution logic
+    // ジョブ実行ロジック
   }
 }
 
-// Usage for indexing markets
+// markets のインデックス用
 interface IndexJob {
   marketId: string
 }
@@ -513,75 +513,9 @@ const indexQueue = new JobQueue<IndexJob>()
 export async function POST(request: Request) {
   const { marketId } = await request.json()
 
-  // Add to queue instead of blocking
+  // ブロックせずにキューへ追加
   await indexQueue.add({ marketId })
 
   return NextResponse.json({ success: true, message: 'Job queued' })
 }
 ```
-
-## Logging & Monitoring
-
-### Structured Logging
-
-```typescript
-interface LogContext {
-  userId?: string
-  requestId?: string
-  method?: string
-  path?: string
-  [key: string]: unknown
-}
-
-class Logger {
-  log(level: 'info' | 'warn' | 'error', message: string, context?: LogContext) {
-    const entry = {
-      timestamp: new Date().toISOString(),
-      level,
-      message,
-      ...context
-    }
-
-    console.log(JSON.stringify(entry))
-  }
-
-  info(message: string, context?: LogContext) {
-    this.log('info', message, context)
-  }
-
-  warn(message: string, context?: LogContext) {
-    this.log('warn', message, context)
-  }
-
-  error(message: string, error: Error, context?: LogContext) {
-    this.log('error', message, {
-      ...context,
-      error: error.message,
-      stack: error.stack
-    })
-  }
-}
-
-const logger = new Logger()
-
-// Usage
-export async function GET(request: Request) {
-  const requestId = crypto.randomUUID()
-
-  logger.info('Fetching markets', {
-    requestId,
-    method: 'GET',
-    path: '/api/markets'
-  })
-
-  try {
-    const markets = await fetchMarkets()
-    return NextResponse.json({ success: true, data: markets })
-  } catch (error) {
-    logger.error('Failed to fetch markets', error as Error, { requestId })
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
-  }
-}
-```
-
-**Remember**: Backend patterns enable scalable, maintainable server-side applications. Choose patterns that fit your complexity level.

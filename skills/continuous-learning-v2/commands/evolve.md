@@ -1,88 +1,88 @@
 ---
 name: evolve
-description: Cluster related instincts into skills, commands, or agents
+description: 関連する instinct を skill、command、agent にクラスタリングする
 command: /evolve
 implementation: python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py evolve
 ---
 
-# Evolve Command
+# Evolve コマンド
 
-## Implementation
+## 実装
 
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py evolve [--generate]
 ```
 
-Analyzes instincts and clusters related ones into higher-level structures:
-- **Commands**: When instincts describe user-invoked actions
-- **Skills**: When instincts describe auto-triggered behaviors
-- **Agents**: When instincts describe complex, multi-step processes
+instinct を分析し、関連するものを上位構造にクラスタリングする:
+- **Commands**: instinct がユーザー起動の行動を記述している場合
+- **Skills**: instinct が自動トリガーの振る舞いを記述している場合
+- **Agents**: instinct が複雑な複数ステップのプロセスを記述している場合
 
-## Usage
+## 使い方
 
 ```
-/evolve                    # Analyze all instincts and suggest evolutions
-/evolve --domain testing   # Only evolve instincts in testing domain
-/evolve --dry-run          # Show what would be created without creating
-/evolve --threshold 5      # Require 5+ related instincts to cluster
+/evolve                    # すべての instinct を分析し、進化を提案する
+/evolve --domain testing   # testing ドメインの instinct のみ進化
+/evolve --dry-run          # 作成せずに作成内容を表示する
+/evolve --threshold 5      # クラスタに必要な関連 instinct を 5 以上にする
 ```
 
-## Evolution Rules
+## 進化ルール
 
-### → Command (User-Invoked)
-When instincts describe actions a user would explicitly request:
-- Multiple instincts about "when user asks to..."
-- Instincts with triggers like "when creating a new X"
-- Instincts that follow a repeatable sequence
+### → Command (ユーザー起動)
+ユーザーが明示的に要求する行動を instinct が記述している場合:
+- "when user asks to..." に関する複数の instinct
+- "when creating a new X" のようなトリガーを持つ instinct
+- 再現可能なシーケンスに従う instinct
 
-Example:
+例:
 - `new-table-step1`: "when adding a database table, create migration"
 - `new-table-step2`: "when adding a database table, update schema"
 - `new-table-step3`: "when adding a database table, regenerate types"
 
-→ Creates: `/new-table` command
+→ 作成: `/new-table` command
 
-### → Skill (Auto-Triggered)
-When instincts describe behaviors that should happen automatically:
-- Pattern-matching triggers
-- Error handling responses
-- Code style enforcement
+### → Skill (自動トリガー)
+自動的に発動すべき振る舞いを instinct が記述している場合:
+- パターンマッチするトリガー
+- エラー処理の応答
+- コードスタイルの強制
 
-Example:
+例:
 - `prefer-functional`: "when writing functions, prefer functional style"
 - `use-immutable`: "when modifying state, use immutable patterns"
 - `avoid-classes`: "when designing modules, avoid class-based design"
 
-→ Creates: `functional-patterns` skill
+→ 作成: `functional-patterns` skill
 
-### → Agent (Needs Depth/Isolation)
-When instincts describe complex, multi-step processes that benefit from isolation:
-- Debugging workflows
-- Refactoring sequences
-- Research tasks
+### → Agent (深さ / 分離が必要)
+複雑で複数ステップのプロセスを instinct が記述しており、分離の恩恵がある場合:
+- デバッグワークフロー
+- リファクタシーケンス
+- 調査タスク
 
-Example:
+例:
 - `debug-step1`: "when debugging, first check logs"
 - `debug-step2`: "when debugging, isolate the failing component"
 - `debug-step3`: "when debugging, create minimal reproduction"
 - `debug-step4`: "when debugging, verify fix with test"
 
-→ Creates: `debugger` agent
+→ 作成: `debugger` agent
 
-## What to Do
+## やること
 
-1. Read all instincts from `~/.claude/homunculus/instincts/`
-2. Group instincts by:
-   - Domain similarity
-   - Trigger pattern overlap
-   - Action sequence relationship
-3. For each cluster of 3+ related instincts:
-   - Determine evolution type (command/skill/agent)
-   - Generate the appropriate file
-   - Save to `~/.claude/homunculus/evolved/{commands,skills,agents}/`
-4. Link evolved structure back to source instincts
+1. `~/.claude/homunculus/instincts/` からすべての instinct を読む
+2. 次の基準で instinct をグループ化する:
+   - ドメインの近さ
+   - トリガーパターンの重なり
+   - アクションシーケンスの関係
+3. 関連する instinct が 3 つ以上の各クラスタに対して:
+   - 進化タイプ (command/skill/agent) を決定する
+   - 適切なファイルを生成する
+   - `~/.claude/homunculus/evolved/{commands,skills,agents}/` に保存する
+4. 進化構造を元の instinct にリンクする
 
-## Output Format
+## 出力形式
 
 ```
 🧬 Evolve Analysis
@@ -121,15 +121,15 @@ Files:
 Run `/evolve --execute` to create these files.
 ```
 
-## Flags
+## フラグ
 
-- `--execute`: Actually create the evolved structures (default is preview)
-- `--dry-run`: Preview without creating
-- `--domain <name>`: Only evolve instincts in specified domain
-- `--threshold <n>`: Minimum instincts required to form cluster (default: 3)
-- `--type <command|skill|agent>`: Only create specified type
+- `--execute`: 進化構造を実際に作成する (デフォルトはプレビュー)
+- `--dry-run`: 作成せずにプレビューする
+- `--domain <name>`: 指定したドメインのみ進化
+- `--threshold <n>`: クラスタ形成に必要な instinct の最小数 (デフォルト: 3)
+- `--type <command|skill|agent>`: 指定したタイプのみ作成
 
-## Generated File Format
+## 生成ファイル形式
 
 ### Command
 ```markdown

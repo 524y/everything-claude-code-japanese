@@ -1,12 +1,12 @@
 #!/bin/bash
-# Continuous Learning - Session Evaluator
-# Runs on Stop hook to extract reusable patterns from Claude Code sessions
+# Continuous Learning - セッション評価器
+# Claude Code セッションから再利用可能なパターンを抽出するために Stop フックで実行する
 #
-# Why Stop hook instead of UserPromptSubmit:
-# - Stop runs once at session end (lightweight)
-# - UserPromptSubmit runs every message (heavy, adds latency)
+# UserPromptSubmit ではなく Stop フックを使う理由:
+# - Stop はセッション終了時に 1 回だけ実行される（軽量）
+# - UserPromptSubmit は毎メッセージ実行される（重い、レイテンシが増える）
 #
-# Hook config (in ~/.claude/settings.json):
+# フック設定（~/.claude/settings.json 内）:
 # {
 #   "hooks": {
 #     "Stop": [{
@@ -19,9 +19,9 @@
 #   }
 # }
 #
-# Patterns to detect: error_resolution, debugging_techniques, workarounds, project_specific
-# Patterns to ignore: simple_typos, one_time_fixes, external_api_issues
-# Extracted skills saved to: ~/.claude/skills/learned/
+# 検出するパターン: error_resolution, debugging_techniques, workarounds, project_specific
+# 無視するパターン: simple_typos, one_time_fixes, external_api_issues
+# 抽出したスキルの保存先: ~/.claude/skills/learned/
 
 set -e
 
@@ -30,31 +30,31 @@ CONFIG_FILE="$SCRIPT_DIR/config.json"
 LEARNED_SKILLS_PATH="${HOME}/.claude/skills/learned"
 MIN_SESSION_LENGTH=10
 
-# Load config if exists
+# 設定ファイルがある場合は読み込む
 if [ -f "$CONFIG_FILE" ]; then
   MIN_SESSION_LENGTH=$(jq -r '.min_session_length // 10' "$CONFIG_FILE")
   LEARNED_SKILLS_PATH=$(jq -r '.learned_skills_path // "~/.claude/skills/learned/"' "$CONFIG_FILE" | sed "s|~|$HOME|")
 fi
 
-# Ensure learned skills directory exists
+# 学習済みスキルのディレクトリが存在することを保証する
 mkdir -p "$LEARNED_SKILLS_PATH"
 
-# Get transcript path from environment (set by Claude Code)
+# 環境から書き起こしパスを取得する（Claude Code が設定する）
 transcript_path="${CLAUDE_TRANSCRIPT_PATH:-}"
 
 if [ -z "$transcript_path" ] || [ ! -f "$transcript_path" ]; then
   exit 0
 fi
 
-# Count messages in session
+# セッション内のメッセージ数を数える
 message_count=$(grep -c '"type":"user"' "$transcript_path" 2>/dev/null || echo "0")
 
-# Skip short sessions
+# 短いセッションはスキップする
 if [ "$message_count" -lt "$MIN_SESSION_LENGTH" ]; then
   echo "[ContinuousLearning] Session too short ($message_count messages), skipping" >&2
   exit 0
 fi
 
-# Signal to Claude that session should be evaluated for extractable patterns
+# 抽出可能なパターンの評価を Claude に通知する
 echo "[ContinuousLearning] Session has $message_count messages - evaluate for extractable patterns" >&2
 echo "[ContinuousLearning] Save learned skills to: $LEARNED_SKILLS_PATH" >&2

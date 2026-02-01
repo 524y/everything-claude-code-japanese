@@ -1,37 +1,37 @@
-# Checkpoint Command
+# Checkpoint コマンド
 
-Create or verify a checkpoint in your workflow.
+ワークフロー内のチェックポイントを作成または検証する。
 
-## Usage
+## 使用方法
 
 `/checkpoint [create|verify|list] [name]`
 
-## Create Checkpoint
+## チェックポイントを作成
 
-When creating a checkpoint:
+チェックポイントを作成する時:
 
-1. Run `/verify quick` to ensure current state is clean
-2. Create a git stash or commit with checkpoint name
-3. Log checkpoint to `.claude/checkpoints.log`:
+1. `/verify quick` を実行し、現在の状態がクリーンであることを確認する
+2. チェックポイント名付きで git stash または commit を作成する
+3. `.claude/checkpoints.log` にチェックポイントを記録する:
 
 ```bash
 echo "$(date +%Y-%m-%d-%H:%M) | $CHECKPOINT_NAME | $(git rev-parse --short HEAD)" >> .claude/checkpoints.log
 ```
 
-4. Report checkpoint created
+4. チェックポイント作成を報告する
 
-## Verify Checkpoint
+## チェックポイントを検証
 
-When verifying against a checkpoint:
+チェックポイントに対して検証する時:
 
-1. Read checkpoint from log
-2. Compare current state to checkpoint:
-   - Files added since checkpoint
-   - Files modified since checkpoint
-   - Test pass rate now vs then
-   - Coverage now vs then
+1. ログからチェックポイントを読み取る
+2. 現在の状態とチェックポイントを比較する:
+   - チェックポイント以降に追加されたファイル
+   - チェックポイント以降に変更されたファイル
+   - テストの合格数の差分
+   - カバレッジの差分
 
-3. Report:
+3. レポート:
 ```
 CHECKPOINT COMPARISON: $NAME
 ============================
@@ -41,17 +41,17 @@ Coverage: +X% / -Y%
 Build: [PASS/FAIL]
 ```
 
-## List Checkpoints
+## チェックポイントの一覧
 
-Show all checkpoints with:
-- Name
-- Timestamp
+次を含めてチェックポイントをすべて表示する:
+- 名前
+- タイムスタンプ
 - Git SHA
-- Status (current, behind, ahead)
+- ステータス（current、behind、ahead）
 
-## Workflow
+## ワークフロー
 
-Typical checkpoint flow:
+一般的なチェックポイントの流れ:
 
 ```
 [Start] --> /checkpoint create "feature-start"
@@ -65,10 +65,10 @@ Typical checkpoint flow:
 [PR] --> /checkpoint verify "feature-start"
 ```
 
-## Arguments
+## 引数
 
 $ARGUMENTS:
-- `create <name>` - Create named checkpoint
-- `verify <name>` - Verify against named checkpoint
-- `list` - Show all checkpoints
-- `clear` - Remove old checkpoints (keeps last 5)
+- `create <name>` - 名前付きのチェックポイントを作成する
+- `verify <name>` - 名前付きのチェックポイントと比較する
+- `list` - チェックポイントを表示する
+- `clear` - 古いチェックポイントを削除する（最後の 5 件は残す）

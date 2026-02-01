@@ -1,29 +1,29 @@
 # Build and Fix
 
-Incrementally fix TypeScript and build errors:
+TypeScript と build エラーを段階的に修正する:
 
-1. Run build: npm run build or pnpm build
+1. build を実行: npm run build または pnpm build
 
-2. Parse error output:
-   - Group by file
-   - Sort by severity
+2. エラー出力を解析する:
+   - ファイルごとにまとめる
+   - 重要度でソートする
 
-3. For each error:
-   - Show error context (5 lines before/after)
-   - Explain the issue
-   - Propose fix
-   - Apply fix
-   - Re-run build
-   - Verify error resolved
+3. 各エラーについて:
+   - エラーの文脈を示す（前後 5 行）
+   - 問題を説明する
+   - 修正案を提示する
+   - 修正を適用する
+   - build を再実行する
+   - エラー解決を確認する
 
-4. Stop if:
-   - Fix introduces new errors
-   - Same error persists after 3 attempts
-   - User requests pause
+4. 次の場合は停止:
+   - 修正が新しいエラーを生む
+   - 同じエラーが 3 回の試行後も残る
+   - ユーザーが停止を要求する
 
-5. Show summary:
-   - Errors fixed
-   - Errors remaining
-   - New errors introduced
+5. サマリーを示す:
+   - 修正したエラー
+   - 残っているエラー
+   - 新しく発生したエラー
 
-Fix one error at a time for safety!
+安全のため、1 回に 1 つのエラーだけ修正すること!

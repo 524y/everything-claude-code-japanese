@@ -1,55 +1,55 @@
 ---
-description: Fix Go build errors, go vet warnings, and linter issues incrementally. Invokes the go-build-resolver agent for minimal, surgical fixes.
+description: Go の build エラー、go vet の警告、linter の問題を段階的に修正する。go-build-resolver エージェントを呼び出し、最小限の外科的修正を行う。
 ---
 
 # Go Build and Fix
 
-This command invokes the **go-build-resolver** agent to incrementally fix Go build errors with minimal changes.
+このコマンドは **go-build-resolver** エージェントを呼び出し、最小限の変更で Go の build エラーを段階的に修正する。
 
-## What This Command Does
+## このコマンドの内容
 
-1. **Run Diagnostics**: Execute `go build`, `go vet`, `staticcheck`
-2. **Parse Errors**: Group by file and sort by severity
-3. **Fix Incrementally**: One error at a time
-4. **Verify Each Fix**: Re-run build after each change
-5. **Report Summary**: Show what was fixed and what remains
+1. **診断の実行**: `go build`、`go vet`、`staticcheck` を実行
+2. **エラー解析**: ファイルごとにまとめて重要度で並べる
+3. **段階的に修正**: 1 回に 1 エラーずつ
+4. **各修正を検証**: 変更ごとに build を再実行
+5. **サマリーを報告**: 修正済みと未解決を提示
 
-## When to Use
+## 使用するタイミング
 
-Use `/go-build` when:
-- `go build ./...` fails with errors
-- `go vet ./...` reports issues
-- `golangci-lint run` shows warnings
-- Module dependencies are broken
-- After pulling changes that break the build
+`/go-build` を使う場面:
+- `go build ./...` がエラーで失敗する
+- `go vet ./...` が問題を報告する
+- `golangci-lint run` が警告を出す
+- module 依存関係が壊れている
+- pull した変更で build が壊れた後
 
-## Diagnostic Commands Run
+## 実行する診断コマンド
 
 ```bash
-# Primary build check
+# 主な build チェック
 go build ./...
 
-# Static analysis
+# 静的解析
 go vet ./...
 
-# Extended linting (if available)
+# 拡張 lint（利用可能なら）
 staticcheck ./...
 golangci-lint run
 
-# Module issues
+# module 問題
 go mod verify
 go mod tidy -v
 ```
 
-## Example Session
+## 例セッション
 
 ```text
-User: /go-build
+ユーザー: /go-build
 
-Agent:
-# Go Build Resolution
+エージェント:
+# Go ビルド解決
 
-## Initial Diagnostics
+## 初期診断
 
 ```bash
 $ go build ./...
@@ -58,51 +58,51 @@ internal/handler/api.go:42:9: cannot use x (type string) as type int
 internal/handler/api.go:58:2: missing return at end of function
 ```
 
-Errors found: 3
+検出されたエラー: 3
 
-## Fix 1: Undefined Identifier
+## 修正 1: 未定義識別子
 
-File: internal/service/user.go:25
-Error: undefined: UserRepository
-Cause: Missing import
+ファイル: internal/service/user.go:25
+エラー: undefined: UserRepository
+原因: import 不足
 
 ```go
-// Added import
+// import を追加
 import "project/internal/repository"
 
-// Changed
+// 変更前
 var repo UserRepository
-// To
+// 変更後
 var repo repository.UserRepository
 ```
 
 ```bash
 $ go build ./...
-# 2 errors remaining
+# 残り 2 エラー
 ```
 
-## Fix 2: Type Mismatch
+## 修正 2: 型不一致
 
-File: internal/handler/api.go:42
-Error: cannot use x (type string) as type int
+ファイル: internal/handler/api.go:42
+エラー: cannot use x (type string) as type int
 
 ```go
-// Changed
+// 変更前
 count := params.Get("count")
-// To
+// 変更後
 countStr := params.Get("count")
 count, _ := strconv.Atoi(countStr)
 ```
 
 ```bash
 $ go build ./...
-# 1 error remaining
+# 残り 1 エラー
 ```
 
-## Fix 3: Missing Return
+## 修正 3: 戻り値不足
 
-File: internal/handler/api.go:58
-Error: missing return at end of function
+ファイル: internal/handler/api.go:58
+エラー: missing return at end of function
 
 ```go
 func GetUser(id string) (*User, error) {
@@ -110,74 +110,74 @@ func GetUser(id string) (*User, error) {
         return nil, ErrInvalidID
     }
     user := findUser(id)
-    // Added missing return
+    // 追加された戻り値
     return user, nil
 }
 ```
 
 ```bash
 $ go build ./...
-# Build successful!
+# Build 成功!
 ```
 
-## Final Verification
+## 最終検証
 
 ```bash
 $ go vet ./...
-# No issues
+# 問題なし
 
 $ go test ./...
 ok      project/internal/service   0.015s
 ok      project/internal/handler   0.023s
 ```
 
-## Summary
+## サマリー
 
-| Metric | Count |
+| 指標 | 件数 |
 |--------|-------|
-| Build errors fixed | 3 |
-| Vet warnings fixed | 0 |
-| Files modified | 2 |
-| Remaining issues | 0 |
+| 修正した build エラー | 3 |
+| 修正した Vet 警告 | 0 |
+| 変更したファイル | 2 |
+| 残りの問題 | 0 |
 
-Build Status: ✅ SUCCESS
+ビルド状態: ✅ SUCCESS
 ```
 
-## Common Errors Fixed
+## よくあるエラーと修正
 
-| Error | Typical Fix |
+| Error | 典型的な修正 |
 |-------|-------------|
-| `undefined: X` | Add import or fix typo |
-| `cannot use X as Y` | Type conversion or fix assignment |
-| `missing return` | Add return statement |
-| `X does not implement Y` | Add missing method |
-| `import cycle` | Restructure packages |
-| `declared but not used` | Remove or use variable |
-| `cannot find package` | `go get` or `go mod tidy` |
+| `undefined: X` | import を追加するか typo を修正 |
+| `cannot use X as Y` | type 変換または代入の修正 |
+| `missing return` | return 文を追加 |
+| `X does not implement Y` | 不足する method を追加 |
+| `import cycle` | パッケージを再構成 |
+| `declared but not used` | 変数を削除するか使用する |
+| `cannot find package` | `go get` または `go mod tidy` |
 
-## Fix Strategy
+## 修正戦略
 
-1. **Build errors first** - Code must compile
-2. **Vet warnings second** - Fix suspicious constructs
-3. **Lint warnings third** - Style and best practices
-4. **One fix at a time** - Verify each change
-5. **Minimal changes** - Don't refactor, just fix
+1. **build エラーを最優先** - コードはコンパイルできる必要がある
+2. **vet 警告を次に** - 不審な構文を修正
+3. **lint 警告を最後に** - スタイルとベストプラクティス
+4. **1 回に 1 つ** - 変更ごとに検証
+5. **最小限の変更** - リファクタリングせず修正のみ
 
-## Stop Conditions
+## 停止条件
 
-The agent will stop and report if:
-- Same error persists after 3 attempts
-- Fix introduces more errors
-- Requires architectural changes
-- Missing external dependencies
+次の場合は停止して報告する:
+- 同じエラーが 3 回の試行後も残る
+- 修正がさらにエラーを生む
+- アーキテクチャ変更が必要
+- 外部依存が不足している
 
-## Related Commands
+## 関連コマンド
 
-- `/go-test` - Run tests after build succeeds
-- `/go-review` - Review code quality
-- `/verify` - Full verification loop
+- `/go-test` - build 成功後にテストを実行
+- `/go-review` - コード品質をレビュー
+- `/verify` - フル検証ループ
 
-## Related
+## 関連
 
 - Agent: `agents/go-build-resolver.md`
 - Skill: `skills/golang-patterns/`

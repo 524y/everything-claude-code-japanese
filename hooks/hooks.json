@@ -10,7 +10,7 @@
             "command": "node -e \"console.error('[Hook] BLOCKED: Dev server must run in tmux for log access');console.error('[Hook] Use: tmux new-session -d -s dev \\\"npm run dev\\\"');console.error('[Hook] Then: tmux attach -t dev');process.exit(1)\""
           }
         ],
-        "description": "Block dev servers outside tmux - ensures you can access logs"
+        "description": "tmux 外での dev サーバー起動をブロックする - ログにアクセスできるようにする"
       },
       {
         "matcher": "tool == \"Bash\" && tool_input.command matches \"(npm (install|test)|pnpm (install|test)|yarn (install|test)?|bun (install|test)|cargo build|make|docker|pytest|vitest|playwright)\"",
@@ -20,7 +20,7 @@
             "command": "node -e \"if(!process.env.TMUX){console.error('[Hook] Consider running in tmux for session persistence');console.error('[Hook] tmux new -s dev  |  tmux attach -t dev')}\""
           }
         ],
-        "description": "Reminder to use tmux for long-running commands"
+        "description": "長時間実行コマンドは tmux を使うようにリマインドする"
       },
       {
         "matcher": "tool == \"Bash\" && tool_input.command matches \"git push\"",
@@ -30,7 +30,7 @@
             "command": "node -e \"console.error('[Hook] Review changes before push...');console.error('[Hook] Continuing with push (remove this hook to add interactive review)')\""
           }
         ],
-        "description": "Reminder before git push to review changes"
+        "description": "git push 前に変更レビューを促す"
       },
       {
         "matcher": "tool == \"Write\" && tool_input.file_path matches \"\\\\.(md|txt)$\" && !(tool_input.file_path matches \"README\\\\.md|CLAUDE\\\\.md|AGENTS\\\\.md|CONTRIBUTING\\\\.md\")",
@@ -40,7 +40,7 @@
             "command": "node -e \"const fs=require('fs');let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const p=i.tool_input?.file_path||'';if(/\\.(md|txt)$/.test(p)&&!/(README|CLAUDE|AGENTS|CONTRIBUTING)\\.md$/.test(p)){console.error('[Hook] BLOCKED: Unnecessary documentation file creation');console.error('[Hook] File: '+p);console.error('[Hook] Use README.md for documentation instead');process.exit(1)}console.log(d)})\""
           }
         ],
-        "description": "Block creation of random .md files - keeps docs consolidated"
+        "description": "無関係な .md ファイルの作成をブロックする - ドキュメントを集約する"
       },
       {
         "matcher": "tool == \"Edit\" || tool == \"Write\"",
@@ -50,7 +50,7 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/suggest-compact.js\""
           }
         ],
-        "description": "Suggest manual compaction at logical intervals"
+        "description": "適切なタイミングで手動コンパクションを提案する"
       }
     ],
     "PreCompact": [
@@ -62,7 +62,7 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/pre-compact.js\""
           }
         ],
-        "description": "Save state before context compaction"
+        "description": "コンテキストのコンパクション前に状態を保存する"
       }
     ],
     "SessionStart": [
@@ -74,7 +74,7 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-start.js\""
           }
         ],
-        "description": "Load previous context and detect package manager on new session"
+        "description": "新規セッションで前回のコンテキストを読み込み、パッケージマネージャーを検出する"
       }
     ],
     "PostToolUse": [
@@ -86,7 +86,7 @@
             "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/gh pr create/.test(cmd)){const out=i.tool_output?.output||'';const m=out.match(/https:\\/\\/github.com\\/[^/]+\\/[^/]+\\/pull\\/\\d+/);if(m){console.error('[Hook] PR created: '+m[0]);const repo=m[0].replace(/https:\\/\\/github.com\\/([^/]+\\/[^/]+)\\/pull\\/\\d+/,'$1');const pr=m[0].replace(/.*\\/pull\\/(\\d+)/,'$1');console.error('[Hook] To review: gh pr review '+pr+' --repo '+repo)}}console.log(d)})\""
           }
         ],
-        "description": "Log PR URL and provide review command after PR creation"
+        "description": "PR 作成後に PR URL を記録し、レビューコマンドを提示する"
       },
       {
         "matcher": "tool == \"Bash\" && tool_input.command matches \"(npm run build|pnpm build|yarn build)\"",
@@ -98,7 +98,7 @@
             "timeout": 30
           }
         ],
-        "description": "Example: async hook for build analysis (runs in background without blocking)"
+        "description": "例: ビルド解析用の async フック（ブロックせずバックグラウンドで実行）"
       },
       {
         "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\.(ts|tsx|js|jsx)$\"",
@@ -108,7 +108,7 @@
             "command": "node -e \"const{execSync}=require('child_process');const fs=require('fs');let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const p=i.tool_input?.file_path;if(p&&fs.existsSync(p)){try{execSync('npx prettier --write \"'+p+'\"',{stdio:['pipe','pipe','pipe']})}catch(e){}}console.log(d)})\""
           }
         ],
-        "description": "Auto-format JS/TS files with Prettier after edits"
+        "description": "編集後に Prettier で JS/TS ファイルを自動整形する"
       },
       {
         "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\.(ts|tsx)$\"",
@@ -118,7 +118,7 @@
             "command": "node -e \"const{execSync}=require('child_process');const fs=require('fs');const path=require('path');let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const p=i.tool_input?.file_path;if(p&&fs.existsSync(p)){let dir=path.dirname(p);while(dir!==path.dirname(dir)&&!fs.existsSync(path.join(dir,'tsconfig.json'))){dir=path.dirname(dir)}if(fs.existsSync(path.join(dir,'tsconfig.json'))){try{const r=execSync('npx tsc --noEmit --pretty false 2>&1',{cwd:dir,encoding:'utf8',stdio:['pipe','pipe','pipe']});const lines=r.split('\\n').filter(l=>l.includes(p)).slice(0,10);if(lines.length)console.error(lines.join('\\n'))}catch(e){const lines=(e.stdout||'').split('\\n').filter(l=>l.includes(p)).slice(0,10);if(lines.length)console.error(lines.join('\\n'))}}}console.log(d)})\""
           }
         ],
-        "description": "TypeScript check after editing .ts/.tsx files"
+        "description": ".ts/.tsx ファイル編集後に TypeScript チェックを行う"
       },
       {
         "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\.(ts|tsx|js|jsx)$\"",
@@ -128,7 +128,7 @@
             "command": "node -e \"const fs=require('fs');let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const p=i.tool_input?.file_path;if(p&&fs.existsSync(p)){const c=fs.readFileSync(p,'utf8');const lines=c.split('\\n');const matches=[];lines.forEach((l,idx)=>{if(/console\\.log/.test(l))matches.push((idx+1)+': '+l.trim())});if(matches.length){console.error('[Hook] WARNING: console.log found in '+p);matches.slice(0,5).forEach(m=>console.error(m));console.error('[Hook] Remove console.log before committing')}}console.log(d)})\""
           }
         ],
-        "description": "Warn about console.log statements after edits"
+        "description": "編集後に console.log の存在を警告する"
       }
     ],
     "Stop": [
@@ -140,7 +140,7 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/check-console-log.js\""
           }
         ],
-        "description": "Check for console.log in modified files after each response"
+        "description": "各レスポンス後に変更済みファイルの console.log を確認する"
       }
     ],
     "SessionEnd": [
@@ -152,7 +152,7 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-end.js\""
           }
         ],
-        "description": "Persist session state on end"
+        "description": "終了時にセッション状態を永続化する"
       },
       {
         "matcher": "*",
@@ -162,7 +162,7 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/evaluate-session.js\""
           }
         ],
-        "description": "Evaluate session for extractable patterns"
+        "description": "抽出可能なパターンのためにセッションを評価する"
       }
     ]
   }

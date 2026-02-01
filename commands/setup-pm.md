@@ -1,42 +1,42 @@
 ---
-description: Configure your preferred package manager (npm/pnpm/yarn/bun)
+description: 好みのパッケージマネージャーを設定する（npm/pnpm/yarn/bun）
 disable-model-invocation: true
 ---
 
-# Package Manager Setup
+# パッケージマネージャー設定
 
-Configure your preferred package manager for this project or globally.
+このプロジェクトまたはグローバルで好みのパッケージマネージャーを設定する。
 
-## Usage
+## 使用方法
 
 ```bash
-# Detect current package manager
+# 現在のパッケージマネージャーを検出
 node scripts/setup-package-manager.js --detect
 
-# Set global preference
+# グローバルの優先設定
 node scripts/setup-package-manager.js --global pnpm
 
-# Set project preference
+# プロジェクトの優先設定
 node scripts/setup-package-manager.js --project bun
 
-# List available package managers
+# 利用可能なパッケージマネージャー一覧
 node scripts/setup-package-manager.js --list
 ```
 
-## Detection Priority
+## 検出の優先順位
 
-When determining which package manager to use, the following order is checked:
+パッケージマネージャーを判定する際は、次の順でチェックする:
 
-1. **Environment variable**: `CLAUDE_PACKAGE_MANAGER`
-2. **Project config**: `.claude/package-manager.json`
-3. **package.json**: `packageManager` field
-4. **Lock file**: Presence of package-lock.json, yarn.lock, pnpm-lock.yaml, or bun.lockb
-5. **Global config**: `~/.claude/package-manager.json`
-6. **Fallback**: First available package manager (pnpm > bun > yarn > npm)
+1. **環境変数**: `CLAUDE_PACKAGE_MANAGER`
+2. **プロジェクト設定**: `.claude/package-manager.json`
+3. **package.json**: `packageManager` フィールド
+4. **ロックファイル**: package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb の存在
+5. **グローバル設定**: `~/.claude/package-manager.json`
+6. **フォールバック**: 最初に利用可能なパッケージマネージャー（pnpm > bun > yarn > npm）
 
-## Configuration Files
+## 設定ファイル
 
-### Global Configuration
+### グローバル設定
 ```json
 // ~/.claude/package-manager.json
 {
@@ -44,7 +44,7 @@ When determining which package manager to use, the following order is checked:
 }
 ```
 
-### Project Configuration
+### プロジェクト設定
 ```json
 // .claude/package-manager.json
 {
@@ -59,9 +59,9 @@ When determining which package manager to use, the following order is checked:
 }
 ```
 
-## Environment Variable
+## 環境変数
 
-Set `CLAUDE_PACKAGE_MANAGER` to override all other detection methods:
+`CLAUDE_PACKAGE_MANAGER` を設定すると、他の検出方法より優先される:
 
 ```bash
 # Windows (PowerShell)
@@ -71,9 +71,9 @@ $env:CLAUDE_PACKAGE_MANAGER = "pnpm"
 export CLAUDE_PACKAGE_MANAGER=pnpm
 ```
 
-## Run the Detection
+## 検出を実行
 
-To see current package manager detection results, run:
+現在の検出結果を見るには次を実行:
 
 ```bash
 node scripts/setup-package-manager.js --detect
