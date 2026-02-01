@@ -1,0 +1,94 @@
+# 用語表
+
+## 目的
+翻訳の一貫性を保つための用語表である。
+
+## 記載ルール
+- 原語は小文字で記載する
+- 迷う場合は候補を併記し、後で統一する
+- ディレクトリ名 / コマンド名など識別子として使われる英語は原文維持
+
+## 用語一覧
+- command: コマンド
+- rule: ルール
+- hook: フック
+- agent: エージェント
+- skill: スキル
+- context: コンテキスト
+- review: レビュー
+- test: テスト
+- script: スクリプト
+- plugin: プラグイン
+- config: 設定
+- configuration: 設定
+- package manager: パッケージマネージャー
+- workspace: ワークスペース
+- session: セッション
+- memory: メモリ
+- tool: ツール
+- tooling: ツール群
+- example: 例
+- marketplace: マーケットプレイス
+- manifest: マニフェスト
+- subagent: サブエージェント
+- orchestration: オーケストレーション
+- pattern: パターン
+- workflow: ワークフロー
+- guide: ガイド
+- frontmatter: フロントマター
+- codemap: codemap
+- flaky: フレイキー
+- coverage: カバレッジ
+- refactor: リファクタ
+- scaffold: スキャフォールド
+- interface: インターフェース
+- unit test: ユニットテスト
+- integration test: 統合テスト
+- edge case: エッジケース
+- endpoint: エンドポイント
+- middleware: ミドルウェア
+- token: トークン
+- rate limit: レートリミット
+- rate limiting: レートリミット
+- validation: バリデーション
+- status line: ステータスライン
+- context window: コンテキストウィンドウ
+- instinct: インスティンクト
+- confidence: 信頼度
+- domain: ドメイン
+- trigger: トリガー
+- action: アクション
+- source: ソース
+- observer: オブザーバー
+- eval: eval
+- grader: グレーダー
+- benchmark: ベンチマーク
+- fuzzing: ファジング
+- linter: リンター
+- lint: lint
+- subtest: サブテスト
+- idiom: イディオム
+- tdd: TDD
+- verification: 検証
+- verify: 検証する
+- type check: 型チェック
+- security scan: セキュリティスキャン
+- diff: diff
+- authentication: 認証
+- authorization: 認可
+- secret: シークレット
+- secrets management: シークレット管理
+- credential: クレデンシャル
+- least privilege: 最小権限
+- access control: アクセス制御
+- dependency: 依存関係
+- pipeline: パイプライン
+- longform: ロングフォーム
+- shortform: ショートフォーム
+- shorthand: ショートフォーム
+- worktree: ワークツリー
+- parallelization: 並列化
+- fork: フォーク
+- sandbox: サンドボックス
+- token economics: トークン経済
+- context rot: コンテキスト劣化
