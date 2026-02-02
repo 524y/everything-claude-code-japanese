@@ -92,3 +92,44 @@
 - sandbox: サンドボックス
 - token economics: トークン経済
 - context rot: コンテキスト劣化
+- schema: スキーマ
+- pull request: プルリクエスト
+- release: リリース
+- maintenance: メンテナンス
+- ci/cd: CI / CD
+- immutability: 不変性
+- repository: リポジトリ
+- entity: エンティティ
+- transaction: トランザクション
+- cache: キャッシュ
+- caching: キャッシュ処理
+- async: 非同期
+- logging: ロギング
+- pagination: ページネーション
+- index: インデックス
+- stream: ストリーム
+- record: レコード
+- optional: Optional
+- static analysis: 静的解析
+- build: ビルド
+- fixture: フィクスチャ
+- mock: モック
+- mocking: モック化
+- parametrization: パラメータ化
+- serializer: シリアライザ
+- view: ビュー
+- viewset: ViewSet
+- model: モデル
+- migration: マイグレーション
+- linting: lint 作業
+- formatting: フォーマット作業
+- deploy: デプロイ
+- deployment: デプロイメント
+- permission: パーミッション
+- role: ロール
+- csrf: CSRF
+- xss: XSS
+- orm: ORM
+- api: API
+- request: リクエスト
+- response: レスポンス

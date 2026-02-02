@@ -93,6 +93,30 @@ Session Activity
 ### 1. 観測フックを有効化する
 
 `~/.claude/settings.json` に追加する:
+**プラグインとしてインストールしている場合**（推奨）:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "*",
+      "hooks": [{
+        "type": "command",
+        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre"
+      }]
+    }],
+    "PostToolUse": [{
+      "matcher": "*",
+      "hooks": [{
+        "type": "command",
+        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post"
+      }]
+    }]
+  }
+}
+```
+
+**`~/.claude/skills` に手動インストールしている場合**:
 
 ```json
 {
@@ -117,18 +141,20 @@ Session Activity
 
 ### 2. ディレクトリ構成を初期化する
 
+Python CLI が自動で作成するが、手動で作る場合は次のとおり:
+
 ```bash
 mkdir -p ~/.claude/homunculus/{instincts/{personal,inherited},evolved/{agents,skills,commands}}
 touch ~/.claude/homunculus/observations.jsonl
 ```
 
-### 3. Observer エージェントを実行する (任意)
-
-Observer はバックグラウンドで観測を分析できる:
+### 3. instinct コマンドを使う
 
 ```bash
-# バックグラウンド observer を開始
-~/.claude/skills/continuous-learning-v2/agents/start-observer.sh
+/instinct-status     # 学習済みインスティンクトと信頼度を表示
+/evolve              # 関連インスティンクトを skills / commands にまとめる
+/instinct-export     # 共有用にインスティンクトをエクスポート
+/instinct-import     # 他者のインスティンクトを取り込む
 ```
 
 ## コマンド

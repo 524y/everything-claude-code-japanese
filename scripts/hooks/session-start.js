@@ -8,7 +8,6 @@
  * ファイルを確認し、利用可能なコンテキストを Claude に通知する。
  */
 
-const path = require('path');
 const {
   getSessionsDir,
   getLearnedSkillsDir,

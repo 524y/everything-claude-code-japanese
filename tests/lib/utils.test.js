@@ -7,7 +7,6 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
 
 // モジュールをインポートする
 const utils = require('../../scripts/lib/utils');
@@ -44,7 +43,7 @@ function runTests() {
   if (test('exactly one platform should be true', () => {
     const platforms = [utils.isWindows, utils.isMacOS, utils.isLinux];
     const trueCount = platforms.filter(p => p).length;
-    // 注記: FreeBSD などでは 0 の可能性がある
+    // 注記: FreeBSD などの他プラットフォームでは 0 の可能性がある
     assert.ok(trueCount <= 1, 'More than one platform is true');
   })) passed++; else failed++;
 
@@ -106,58 +105,52 @@ function runTests() {
     assert.ok(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(dt), `Expected YYYY-MM-DD HH:MM:SS, got ${dt}`);
   })) passed++; else failed++;
 
-  // セッション ID 関数のテスト
+  // プロジェクト名のテスト
+  console.log('\nProject Name Functions:');
+
+  if (test('getGitRepoName returns string or null', () => {
+    const repoName = utils.getGitRepoName();
+    assert.ok(repoName === null || typeof repoName === 'string');
+  })) passed++; else failed++;
+
+  if (test('getProjectName returns non-empty string', () => {
+    const name = utils.getProjectName();
+    assert.ok(name && name.length > 0);
+  })) passed++; else failed++;
+
+  // セッション ID のテスト
   console.log('\nSession ID Functions:');
 
-  if (test('getSessionIdShort returns default when no env var', () => {
-    const originalEnv = process.env.CLAUDE_SESSION_ID;
+  if (test('getSessionIdShort falls back to project name', () => {
+    const original = process.env.CLAUDE_SESSION_ID;
     delete process.env.CLAUDE_SESSION_ID;
     try {
       const shortId = utils.getSessionIdShort();
-      assert.strictEqual(shortId, 'default');
+      assert.strictEqual(shortId, utils.getProjectName());
     } finally {
-      if (originalEnv) process.env.CLAUDE_SESSION_ID = originalEnv;
+      if (original) process.env.CLAUDE_SESSION_ID = original;
     }
   })) passed++; else failed++;
 
   if (test('getSessionIdShort returns last 8 characters', () => {
-    const originalEnv = process.env.CLAUDE_SESSION_ID;
+    const original = process.env.CLAUDE_SESSION_ID;
     process.env.CLAUDE_SESSION_ID = 'test-session-abc12345';
     try {
-      const shortId = utils.getSessionIdShort();
-      assert.strictEqual(shortId, 'abc12345');
+      assert.strictEqual(utils.getSessionIdShort(), 'abc12345');
     } finally {
-      if (originalEnv) {
-        process.env.CLAUDE_SESSION_ID = originalEnv;
-      } else {
-        delete process.env.CLAUDE_SESSION_ID;
-      }
-    }
-  })) passed++; else failed++;
-
-  if (test('getSessionIdShort uses custom fallback', () => {
-    const originalEnv = process.env.CLAUDE_SESSION_ID;
-    delete process.env.CLAUDE_SESSION_ID;
-    try {
-      const shortId = utils.getSessionIdShort('custom');
-      assert.strictEqual(shortId, 'custom');
-    } finally {
-      if (originalEnv) process.env.CLAUDE_SESSION_ID = originalEnv;
+      if (original) process.env.CLAUDE_SESSION_ID = original;
+      else delete process.env.CLAUDE_SESSION_ID;
     }
   })) passed++; else failed++;
 
   if (test('getSessionIdShort handles short session IDs', () => {
-    const originalEnv = process.env.CLAUDE_SESSION_ID;
+    const original = process.env.CLAUDE_SESSION_ID;
     process.env.CLAUDE_SESSION_ID = 'short';
     try {
-      const shortId = utils.getSessionIdShort();
-      assert.strictEqual(shortId, 'short');
+      assert.strictEqual(utils.getSessionIdShort(), 'short');
     } finally {
-      if (originalEnv) {
-        process.env.CLAUDE_SESSION_ID = originalEnv;
-      } else {
-        delete process.env.CLAUDE_SESSION_ID;
-      }
+      if (original) process.env.CLAUDE_SESSION_ID = original;
+      else delete process.env.CLAUDE_SESSION_ID;
     }
   })) passed++; else failed++;
 

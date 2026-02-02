@@ -52,7 +52,7 @@ process.stdin.on('end', () => {
     if (hasConsole) {
       console.error('[Hook] Remove console.log statements before committing');
     }
-  } catch (error) {
+  } catch (_error) {
     // エラーは黙って無視する (git が利用できないなど)
   }
 

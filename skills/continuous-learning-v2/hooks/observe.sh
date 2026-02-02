@@ -5,15 +5,31 @@
 # Claude Code はフックデータを JSON として stdin から渡す。
 #
 # フック設定（~/.claude/settings.json 内）:
+#
+# プラグインとしてインストールする場合は ${CLAUDE_PLUGIN_ROOT} を使う:
 # {
 #   "hooks": {
 #     "PreToolUse": [{
 #       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh" }]
+#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre" }]
 #     }],
 #     "PostToolUse": [{
 #       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh" }]
+#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post" }]
+#     }]
+#   }
+# }
+#
+# ~/.claude/skills に手動インストールする場合:
+# {
+#   "hooks": {
+#     "PreToolUse": [{
+#       "matcher": "*",
+#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh pre" }]
+#     }],
+#     "PostToolUse": [{
+#       "matcher": "*",
+#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh post" }]
 #     }]
 #   }
 # }

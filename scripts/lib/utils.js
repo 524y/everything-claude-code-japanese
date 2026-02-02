@@ -80,16 +80,33 @@ function getTimeString() {
 }
 
 /**
+ * git リポジトリ名を取得する
+ */
+function getGitRepoName() {
+  const result = runCommand('git rev-parse --show-toplevel');
+  if (!result.success) return null;
+  return path.basename(result.output);
+}
+
+/**
+ * git リポジトリまたはカレントディレクトリからプロジェクト名を取得する
+ */
+function getProjectName() {
+  const repoName = getGitRepoName();
+  if (repoName) return repoName;
+  return path.basename(process.cwd()) || null;
+}
+
+/**
  * CLAUDE_SESSION_ID 環境変数から短いセッション ID を取得する
- * 簡潔で一意性を保つため末尾 8 文字を返す
- * @param {string} fallback - セッション ID がない場合のフォールバック値 (default: 'default')
+ * 末尾 8 文字を返し、未設定ならプロジェクト名、最後に 'default' へフォールバックする
  */
 function getSessionIdShort(fallback = 'default') {
   const sessionId = process.env.CLAUDE_SESSION_ID;
-  if (!sessionId || sessionId.length === 0) {
-    return fallback;
+  if (sessionId && sessionId.length > 0) {
+    return sessionId.slice(-8);
   }
-  return sessionId.slice(-8);
+  return getProjectName() || fallback;
 }
 
 /**
@@ -373,7 +390,11 @@ module.exports = {
   getDateString,
   getTimeString,
   getDateTimeString,
+
+  // セッション / プロジェクト
   getSessionIdShort,
+  getGitRepoName,
+  getProjectName,
 
   // ファイル操作
   findFiles,
