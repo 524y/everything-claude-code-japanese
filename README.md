@@ -200,6 +200,8 @@ everything-claude-code/
 - **Instinct collections** - continuous-learning-v2 用
 - **Pattern extraction** - コミット履歴から学習する
 
+インスティンクト（instincts）は「いつ」「何をするか」を短いルールとして記録した行動パターンである。continuous-learning-v2 では、個人用（personal）と継承用（inherited）に分けて蓄積し、必要に応じてスキル / コマンド / エージェントへ進化させる。
+
 ```bash
 # GitHub App をインストール後、スキルは次に生成される:
 ~/.claude/skills/generated/
