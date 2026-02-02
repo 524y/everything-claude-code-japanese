@@ -6,7 +6,7 @@
 
 > **前提条件**: このガイドは [Everything Claude Code ショートフォームガイド](./the-shortform-guide.md) を前提にしている。スキル、フック、サブエージェント、MCP、プラグインを設定していない場合は先に読むこと。
 
-![Reference to Shorthand Guide](./assets/images/longform/02-shortform-reference.png)
+![Reference to Shortform Guide](./assets/images/longform/02-shortform-reference.png)
 *ショートフォームガイド - 先に読むこと*
 
 ショートフォームガイドでは、基礎的なセットアップを扱った。スキルとコマンド、フック、サブエージェント、MCP、プラグイン、そして Claude Code ワークフローの背骨となる設定パターンである。これはセットアップガイドであり、基盤のインフラである。
