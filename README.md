@@ -243,6 +243,20 @@ everything-claude-code/
 
 これにより、すべてのコマンド、エージェント、スキル、フックに即座にアクセスできる。
 
+> **注意:** Claude Code の plugin system は、plugin 経由で `rules` を配布できない（[本家の制限](https://code.claude.com/docs/en/plugins-reference)）。`rules` は手動でインストールする必要がある。
+>
+> ```bash
+> # 先にリポジトリを clone
+> git clone https://github.com/affaan-m/everything-claude-code.git
+>
+> # 選択肢 A: ユーザー単位の rules（全プロジェクトに適用）
+> cp -r everything-claude-code/rules/* ~/.claude/rules/
+>
+> # 選択肢 B: プロジェクト単位の rules（現在のプロジェクトのみに適用）
+> mkdir -p .claude/rules
+> cp -r everything-claude-code/rules/* .claude/rules/
+> ```
+
 ---
 
 ### 方法 2: 手動インストール
