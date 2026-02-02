@@ -97,3 +97,18 @@
 - release: リリース
 - maintenance: メンテナンス
 - ci/cd: CI / CD
+- immutability: 不変性
+- repository: リポジトリ
+- entity: エンティティ
+- transaction: トランザクション
+- cache: キャッシュ
+- caching: キャッシュ
+- async: 非同期
+- logging: ロギング
+- pagination: ページネーション
+- index: インデックス
+- stream: ストリーム
+- record: レコード
+- optional: Optional
+- static analysis: 静的解析
+- build: ビルド
