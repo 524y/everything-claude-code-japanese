@@ -265,7 +265,7 @@ claude --version
 Claude Code v2.1+ は、インストールされたプラグインの `hooks/hooks.json` を慣例で**自動読み込み**する。`plugin.json` に明示的に宣言すると重複検出エラーになる:
 
 ```
-Duplicate hooks file detected: ./hooks/hooks.json resolves to already-loaded file
+フック ファイルの重複を検出: ./hooks/hooks.json は既に読み込まれたファイルに解決される
 ```
 
 **経緯:** この挙動は、このリポジトリで繰り返し修正 / リバートを引き起こした ([#29](https://github.com/affaan-m/everything-claude-code/issues/29), [#52](https://github.com/affaan-m/everything-claude-code/issues/52), [#103](https://github.com/affaan-m/everything-claude-code/issues/103))。Claude Code のバージョン間で挙動が変わり混乱が起きたため、再導入を防ぐリグレッション テストが追加されている。

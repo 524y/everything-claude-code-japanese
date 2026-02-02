@@ -127,21 +127,21 @@ Claude プラグイン マニフェスト バリデーションは**厳格で強
 Claude Code v2.1+ は、インストールされたプラグインの `hooks/hooks.json` を慣例で**自動読み込み**する。`plugin.json` にも宣言すると次のエラーになる:
 
 ```
-Duplicate hooks file detected: ./hooks/hooks.json resolves to already-loaded file.
-The standard hooks/hooks.json is loaded automatically, so manifest.hooks should
-only reference additional hook files.
+フック ファイルの重複を検出: ./hooks/hooks.json は既に読み込まれたファイルに解決される。
+標準の hooks/hooks.json は自動読み込みされるため、manifest.hooks は
+追加の hook ファイルのみを参照すべきである。
 ```
 
 ### 繰り返しの追加 / 削除の履歴
 
 このリポジトリでは修正 / リバートのループが発生している:
 
-| Commit | Action | Trigger |
+| コミット | アクション | トリガー |
 |--------|--------|---------|
-| `22ad036` | ADD hooks | Users reported "hooks not loading" |
-| `a7bc5f2` | REMOVE hooks | Users reported "duplicate hooks error" (#52) |
-| `779085e` | ADD hooks | Users reported "agents not loading" (#88) |
-| `e3a1306` | REMOVE hooks | Users reported "duplicate hooks error" (#103) |
+| `22ad036` | hooks を追加 | "hooks not loading" の報告 |
+| `a7bc5f2` | hooks を削除 | "duplicate hooks error" の報告 (#52) |
+| `779085e` | hooks を追加 | "agents not loading" の報告 (#88) |
+| `e3a1306` | hooks を削除 | "duplicate hooks error" の報告 (#103) |
 
 **根本原因:** Claude Code CLI の挙動がバージョン間で変化した:
 - v2.1 前: `hooks` の明示宣言が必須
@@ -186,7 +186,7 @@ only reference additional hook files.
 
 この構造は Claude プラグイン バリデーションに対して検証済み。
 
-**Important:** Notice there is NO `"hooks"` field. The `hooks/hooks.json` file is loaded automatically by convention. Adding it explicitly causes a duplicate error.
+**重要:** `"hooks"` フィールドは存在しない。`hooks/hooks.json` は慣例で自動読み込みされる。明示的に追加すると重複エラーになる。
 
 ---
 
