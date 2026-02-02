@@ -265,7 +265,7 @@ go get -u ./...
 ### Checksum Mismatch
 
 ```bash
-# module cache をクリアする
+# module キャッシュ をクリアする
 go clean -modcache
 
 # 再ダウンロードする
