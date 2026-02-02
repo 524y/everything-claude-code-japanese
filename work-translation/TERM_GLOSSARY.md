@@ -102,7 +102,7 @@
 - entity: エンティティ
 - transaction: トランザクション
 - cache: キャッシュ
-- caching: キャッシュ
+- caching: キャッシュ処理
 - async: 非同期
 - logging: ロギング
 - pagination: ページネーション
