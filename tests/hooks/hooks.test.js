@@ -1,7 +1,7 @@
 /**
- * フック スクリプトのテスト
+ * Tests for hook scripts
  *
- * 実行方法: node tests/hooks/hooks.test.js
+ * Run with: node tests/hooks/hooks.test.js
  */
 
 const assert = require('assert');
@@ -10,7 +10,7 @@ const fs = require('fs');
 const os = require('os');
 const { execSync, spawn } = require('child_process');
 
-// テストヘルパー
+// Test helper
 function test(name, fn) {
   try {
     fn();
@@ -23,7 +23,7 @@ function test(name, fn) {
   }
 }
 
-// 非同期テストヘルパー
+// Async test helper
 async function asyncTest(name, fn) {
   try {
     await fn();
@@ -36,7 +36,7 @@ async function asyncTest(name, fn) {
   }
 }
 
-// スクリプトを実行して出力を取得する
+// Run a script and capture output
 function runScript(scriptPath, input = '', env = {}) {
   return new Promise((resolve, reject) => {
     const proc = spawn('node', [scriptPath], {
@@ -63,19 +63,19 @@ function runScript(scriptPath, input = '', env = {}) {
   });
 }
 
-// 一時テストディレクトリを作成する
+// Create a temporary test directory
 function createTestDir() {
   const testDir = path.join(os.tmpdir(), `hooks-test-${Date.now()}`);
   fs.mkdirSync(testDir, { recursive: true });
   return testDir;
 }
 
-// テストディレクトリをクリーンアップする
+// Clean up test directory
 function cleanupTestDir(testDir) {
   fs.rmSync(testDir, { recursive: true, force: true });
 }
 
-// テストスイート
+// Test suite
 async function runTests() {
   console.log('\n=== Testing Hook Scripts ===\n');
 
@@ -84,7 +84,7 @@ async function runTests() {
 
   const scriptsDir = path.join(__dirname, '..', '..', 'scripts', 'hooks');
 
-  // session-start.js のテスト
+  // session-start.js tests
   console.log('session-start.js:');
 
   if (await asyncTest('runs without error', async () => {
@@ -101,7 +101,7 @@ async function runTests() {
     );
   })) passed++; else failed++;
 
-  // session-end.js のテスト
+  // session-end.js tests
   console.log('\nsession-end.js:');
 
   if (await asyncTest('runs without error', async () => {
@@ -110,11 +110,11 @@ async function runTests() {
   })) passed++; else failed++;
 
   if (await asyncTest('creates or updates session file', async () => {
-    // スクリプトを実行する
+    // Run the script
     await runScript(path.join(scriptsDir, 'session-end.js'));
 
-    // セッションファイルが作成されたか確認する (デフォルトのセッション ID)
-    // スクリプトの getDateString() 関数に合わせるためローカル時刻を使う
+    // Check if session file was created (default session ID)
+    // Use local time to match the script's getDateString() function
     const sessionsDir = path.join(os.homedir(), '.claude', 'sessions');
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -125,15 +125,15 @@ async function runTests() {
 
   if (await asyncTest('includes session ID in filename', async () => {
     const testSessionId = 'test-session-abc12345';
-    const expectedShortId = 'abc12345'; // 末尾 8 文字
+    const expectedShortId = 'abc12345'; // Last 8 chars
 
-    // カスタムセッション ID で実行する
+    // Run with custom session ID
     await runScript(path.join(scriptsDir, 'session-end.js'), '', {
       CLAUDE_SESSION_ID: testSessionId
     });
 
-    // セッション ID を含むファイルが作成されたか確認する
-    // スクリプトの getDateString() 関数に合わせるためローカル時刻を使う
+    // Check if session file was created with session ID
+    // Use local time to match the script's getDateString() function
     const sessionsDir = path.join(os.homedir(), '.claude', 'sessions');
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -142,7 +142,7 @@ async function runTests() {
     assert.ok(fs.existsSync(sessionFile), `Session file should exist: ${sessionFile}`);
   })) passed++; else failed++;
 
-  // pre-compact.js のテスト
+  // pre-compact.js tests
   console.log('\npre-compact.js:');
 
   if (await asyncTest('runs without error', async () => {
@@ -161,7 +161,7 @@ async function runTests() {
     assert.ok(fs.existsSync(logFile), 'Compaction log should exist');
   })) passed++; else failed++;
 
-  // suggest-compact.js のテスト
+  // suggest-compact.js tests
   console.log('\nsuggest-compact.js:');
 
   if (await asyncTest('runs without error', async () => {
@@ -174,19 +174,19 @@ async function runTests() {
   if (await asyncTest('increments counter on each call', async () => {
     const sessionId = 'test-counter-' + Date.now();
 
-    // 複数回実行する
+    // Run multiple times
     for (let i = 0; i < 3; i++) {
       await runScript(path.join(scriptsDir, 'suggest-compact.js'), '', {
         CLAUDE_SESSION_ID: sessionId
       });
     }
 
-    // カウンターファイルを確認する
+    // Check counter file
     const counterFile = path.join(os.tmpdir(), `claude-tool-count-${sessionId}`);
     const count = parseInt(fs.readFileSync(counterFile, 'utf8').trim(), 10);
     assert.strictEqual(count, 3, `Counter should be 3, got ${count}`);
 
-    // クリーンアップ
+    // Cleanup
     fs.unlinkSync(counterFile);
   })) passed++; else failed++;
 
@@ -194,7 +194,7 @@ async function runTests() {
     const sessionId = 'test-threshold-' + Date.now();
     const counterFile = path.join(os.tmpdir(), `claude-tool-count-${sessionId}`);
 
-    // カウンターをしきい値 - 1 に設定する
+    // Set counter to threshold - 1
     fs.writeFileSync(counterFile, '49');
 
     const result = await runScript(path.join(scriptsDir, 'suggest-compact.js'), '', {
@@ -207,11 +207,11 @@ async function runTests() {
       'Should suggest compact at threshold'
     );
 
-    // クリーンアップ
+    // Cleanup
     fs.unlinkSync(counterFile);
   })) passed++; else failed++;
 
-  // evaluate-session.js のテスト
+  // evaluate-session.js tests
   console.log('\nevaluate-session.js:');
 
   if (await asyncTest('runs without error when no transcript', async () => {
@@ -223,7 +223,7 @@ async function runTests() {
     const testDir = createTestDir();
     const transcriptPath = path.join(testDir, 'transcript.jsonl');
 
-    // 短いトランスクリプトを作成する (ユーザーメッセージが 10 件未満)
+    // Create a short transcript (less than 10 user messages)
     const transcript = Array(5).fill('{"type":"user","content":"test"}\n').join('');
     fs.writeFileSync(transcriptPath, transcript);
 
@@ -243,7 +243,7 @@ async function runTests() {
     const testDir = createTestDir();
     const transcriptPath = path.join(testDir, 'transcript.jsonl');
 
-    // 長いトランスクリプトを作成する (ユーザーメッセージが 10 件より多い)
+    // Create a longer transcript (more than 10 user messages)
     const transcript = Array(15).fill('{"type":"user","content":"test"}\n').join('');
     fs.writeFileSync(transcriptPath, transcript);
 
@@ -259,13 +259,13 @@ async function runTests() {
     cleanupTestDir(testDir);
   })) passed++; else failed++;
 
-  // hooks.json のバリデーション
+  // hooks.json validation
   console.log('\nhooks.json Validation:');
 
   if (test('hooks.json is valid JSON', () => {
     const hooksPath = path.join(__dirname, '..', '..', 'hooks', 'hooks.json');
     const content = fs.readFileSync(hooksPath, 'utf8');
-    JSON.parse(content); // 無効なら例外を投げる
+    JSON.parse(content); // Will throw if invalid
   })) passed++; else failed++;
 
   if (test('hooks.json has required event types', () => {
@@ -309,7 +309,7 @@ async function runTests() {
       for (const entry of hookArray) {
         for (const hook of entry.hooks) {
           if (hook.type === 'command' && hook.command.includes('scripts/hooks/')) {
-            // コマンドに "${CLAUDE_PLUGIN_ROOT}" の文字列が含まれるか確認する
+            // Check for the literal string "${CLAUDE_PLUGIN_ROOT}" in the command
             const hasPluginRoot = hook.command.includes('${CLAUDE_PLUGIN_ROOT}');
             assert.ok(
               hasPluginRoot,
@@ -325,7 +325,23 @@ async function runTests() {
     }
   })) passed++; else failed++;
 
-  // サマリー
+  // plugin.json 検証
+  console.log('\nplugin.json 検証:');
+
+  if (test('plugin.json に hooks の明示定義がない', () => {
+    // Claude Code は規約により hooks/hooks.json を自動読み込みする。
+    // plugin.json に明示すると重複検出エラーになる。
+    // 参照: https://github.com/affaan-m/everything-claude-code/issues/103
+    const pluginPath = path.join(__dirname, '..', '..', '.claude-plugin', 'plugin.json');
+    const plugin = JSON.parse(fs.readFileSync(pluginPath, 'utf8'));
+
+    assert.ok(
+      !plugin.hooks,
+      'plugin.json に "hooks" は含めない（Claude Code が hooks/hooks.json を自動読み込みする）'
+    );
+  })) passed++; else failed++;
+
+  // Summary
   console.log('\n=== Test Results ===');
   console.log(`Passed: ${passed}`);
   console.log(`Failed: ${failed}`);
