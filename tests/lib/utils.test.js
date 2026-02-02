@@ -8,10 +8,10 @@ const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
 
-// モジュールを読み込む
+// モジュールをインポートする
 const utils = require('../../scripts/lib/utils');
 
-// テスト ヘルパー
+// テストヘルパー
 function test(name, fn) {
   try {
     fn();
@@ -24,7 +24,7 @@ function test(name, fn) {
   }
 }
 
-// テスト スイート
+// テストスイート
 function runTests() {
   console.log('\n=== Testing utils.js ===\n');
 
@@ -43,7 +43,7 @@ function runTests() {
   if (test('exactly one platform should be true', () => {
     const platforms = [utils.isWindows, utils.isMacOS, utils.isLinux];
     const trueCount = platforms.filter(p => p).length;
-    // 注: FreeBSD などの他プラットフォームでは 0 の可能性がある
+    // 注記: FreeBSD などの他プラットフォームでは 0 の可能性がある
     assert.ok(trueCount <= 1, 'More than one platform is true');
   })) passed++; else failed++;
 
