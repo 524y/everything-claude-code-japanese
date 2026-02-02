@@ -14,7 +14,8 @@
 
 <p align="left">
   <span>日本語</span> |
-  <a href="README.zh-CN.md">简体中文</a>
+  <a href="README.zh-CN.md">简体中文</a> |
+  <a href="docs/zh-TW/README.md">繁體中文</a>
 </p>
 
 **Anthropic のハッカソン優勝者による Claude Code 設定の完全版コレクションである。**
