@@ -32,7 +32,7 @@
 <tr>
 <td width="50%">
 <a href="https://x.com/affaanmustafa/status/2012378465664745795">
-<img src="https://github.com/user-attachments/assets/1a471488-59cc-425b-8345-5245c7efbcef" alt="The Shortform Guide to Everything Claude Code" />
+<img src="https://github.com/user-attachments/assets/1a471488-59cc-425b-8345-5245c7efbcef" alt="The Shorthand Guide to Everything Claude Code" />
 </a>
 </td>
 <td width="50%">
@@ -42,7 +42,7 @@
 </td>
 </tr>
 <tr>
-<td align="center"><b>Shortform Guide</b><br/>セットアップ、基礎、思想。<b>まずこれを読むこと。</b></td>
+<td align="center"><b>Shorthand Guide</b><br/>セットアップ、基礎、思想。<b>まずこれを読むこと。</b></td>
 <td align="center"><b>Longform Guide</b><br/>トークン最適化、メモリ永続化、評価、並列化。</td>
 </tr>
 </table>
@@ -463,7 +463,7 @@ node tests/hooks/hooks.test.js
 
 ## リンク
 
-- **Shortform Guide（開始はこちら）:** [The Shortform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2012378465664745795)
+- **Shorthand Guide（開始はこちら）:** [The Shorthand Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2012378465664745795)
 - **Longform Guide（上級）:** [The Longform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2014040193557471352)
 - **Follow:** [@affaanmustafa](https://x.com/affaanmustafa)
 - **zenith.chat:** [zenith.chat](https://zenith.chat)
