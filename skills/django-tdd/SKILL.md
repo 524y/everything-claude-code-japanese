@@ -579,7 +579,7 @@ class TestPaymentView:
     @patch('apps.payments.services.stripe')
     def test_failed_payment(self, mock_stripe, client, user, product):
         """失敗した支払いをテストする。"""
-        mock_stripe.Charge.create.side_effect = Exception('Card declined')
+        mock_stripe.Charge.create.side_effect = Exception('カードが拒否された')
 
         client.force_login(user)
         response = client.post(reverse('payments:process'), {
@@ -605,7 +605,7 @@ def test_order_confirmation_email(db, order):
 
     assert len(mail.outbox) == 1
     assert order.user.email in mail.outbox[0].to
-    assert 'Order Confirmation' in mail.outbox[0].subject
+    assert '注文確認' in mail.outbox[0].subject
 ```
 
 ## 統合テスト

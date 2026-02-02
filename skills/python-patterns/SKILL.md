@@ -146,9 +146,9 @@ def load_config(path: str) -> Config:
         with open(path) as f:
             return Config.from_json(f.read())
     except FileNotFoundError as e:
-        raise ConfigError(f"Config file not found: {path}") from e
+        raise ConfigError(f"設定ファイルが見つからない: {path}") from e
     except json.JSONDecodeError as e:
-        raise ConfigError(f"Invalid JSON in config: {path}") from e
+        raise ConfigError(f"設定 JSON が不正: {path}") from e
 
 # Bad: 裸の except
 def load_config(path: str) -> Config:
@@ -167,7 +167,7 @@ def process_data(data: str) -> Result:
         parsed = json.loads(data)
     except json.JSONDecodeError as e:
         # トレースバックを保持するために例外を連鎖させる
-        raise ValueError(f"Failed to parse data: {data}") from e
+        raise ValueError(f"データの解析に失敗: {data}") from e
 ```
 
 ### カスタム例外階層
@@ -189,7 +189,7 @@ class NotFoundError(AppError):
 def get_user(user_id: str) -> User:
     user = db.find_user(user_id)
     if not user:
-        raise NotFoundError(f"User not found: {user_id}")
+        raise NotFoundError(f"ユーザーが見つからない: {user_id}")
     return user
 ```
 
@@ -223,7 +223,7 @@ def timer(name: str):
     start = time.perf_counter()
     yield
     elapsed = time.perf_counter() - start
-    print(f"{name} took {elapsed:.4f} seconds")
+    print(f"{name} は {elapsed:.4f} 秒かかった")
 
 # 使用例
 with timer("data processing"):
@@ -341,10 +341,10 @@ class User:
     def __post_init__(self):
         # email 形式を検証する
         if "@" not in self.email:
-            raise ValueError(f"Invalid email: {self.email}")
+            raise ValueError(f"無効な email: {self.email}")
         # 年齢の範囲を検証する
         if self.age < 0 or self.age > 150:
-            raise ValueError(f"Invalid age: {self.age}")
+            raise ValueError(f"無効な年齢: {self.age}")
 ```
 
 ### named tuple
@@ -381,7 +381,7 @@ def timer(func: Callable) -> Callable:
         start = time.perf_counter()
         result = func(*args, **kwargs)
         elapsed = time.perf_counter() - start
-        print(f"{func.__name__} took {elapsed:.4f}s")
+        print(f"{func.__name__} は {elapsed:.4f}s かかった")
         return result
     return wrapper
 
@@ -389,7 +389,7 @@ def timer(func: Callable) -> Callable:
 def slow_function():
     time.sleep(1)
 
-# slow_function() prints: slow_function took 1.0012s
+# slow_function() は: slow_function took 1.0012s を出力する
 ```
 
 ### パラメータ付きデコレータ
@@ -411,7 +411,7 @@ def repeat(times: int):
 def greet(name: str) -> str:
     return f"Hello, {name}!"
 
-# greet("Alice") returns ["Hello, Alice!", "Hello, Alice!", "Hello, Alice!"]
+# greet("Alice") は ["Hello, Alice!", "Hello, Alice!", "Hello, Alice!"] を返す
 ```
 
 ### クラスベース デコレータ
@@ -426,7 +426,7 @@ class CountCalls:
 
     def __call__(self, *args, **kwargs):
         self.count += 1
-        print(f"{self.func.__name__} has been called {self.count} times")
+        print(f"{self.func.__name__} は {self.count} 回呼ばれた")
         return self.func(*args, **kwargs)
 
 @CountCalls
@@ -460,7 +460,7 @@ def fetch_all_urls(urls: list[str]) -> dict[str, str]:
             try:
                 results[url] = future.result()
             except Exception as e:
-                results[url] = f"Error: {e}"
+                results[url] = f"エラー: {e}"
     return results
 ```
 
@@ -743,7 +743,7 @@ except:
 try:
     risky_operation()
 except SpecificError as e:
-    logger.error(f"Operation failed: {e}")
+    logger.error(f"処理に失敗: {e}")
 ```
 
 __注意__: Python コードは読みやすく、明示的で、驚き最小の原則に従うべきである。迷ったら巧妙さより明確さを優先する。

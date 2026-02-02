@@ -81,8 +81,8 @@ assert result == expected
 assert result != unexpected
 
 # 真偽
-assert result  # Truthy
-assert not result  # Falsy
+assert result  # 真
+assert not result  # 偽
 assert result is True  # 厳密に True
 assert result is False  # 厳密に False
 assert result is None  # 厳密に None
@@ -100,16 +100,16 @@ assert isinstance(result, str)
 
 # 例外テスト（推奨）
 with pytest.raises(ValueError):
-    raise ValueError("error message")
+    raise ValueError("エラーメッセージ")
 
 # 例外メッセージの確認
-with pytest.raises(ValueError, match="invalid input"):
-    raise ValueError("invalid input provided")
+with pytest.raises(ValueError, match="無効な入力"):
+    raise ValueError("無効な入力が指定された")
 
 # 例外属性の確認
 with pytest.raises(ValueError) as exc_info:
-    raise ValueError("error message")
-assert str(exc_info.value) == "error message"
+    raise ValueError("エラーメッセージ")
+assert str(exc_info.value) == "エラーメッセージ"
 ```
 
 ## フィクスチャ
@@ -136,14 +136,14 @@ def test_sample_data(sample_data):
 @pytest.fixture
 def database():
     """セットアップ / ティアダウン付きフィクスチャ。"""
-    # Setup
+    # セットアップ
     db = Database(":memory:")
     db.create_tables()
     db.insert_test_data()
 
     yield db  # テストに提供
 
-    # Teardown
+    # ティアダウン
     db.close()
 
 def test_database_query(database):
@@ -394,7 +394,7 @@ def test_database_connection(connect_mock):
 @patch("mypackage.api_call")
 def test_api_error_handling(api_call_mock):
     """例外をモックしてエラーハンドリングをテストする。"""
-    api_call_mock.side_effect = ConnectionError("Network error")
+    api_call_mock.side_effect = ConnectionError("ネットワークエラー")
 
     with pytest.raises(ConnectionError):
         api_call()
@@ -409,12 +409,12 @@ def test_api_error_handling(api_call_mock):
 @patch("builtins.open", new_callable=mock_open)
 def test_file_reading(mock_file):
     """open をモックしてファイル読み込みをテストする。"""
-    mock_file.return_value.read.return_value = "file content"
+    mock_file.return_value.read.return_value = "ファイル内容"
 
     result = read_file("test.txt")
 
     mock_file.assert_called_once_with("test.txt", "r")
-    assert result == "file content"
+    assert result == "ファイル内容"
 ```
 
 ### autospec の使用
@@ -454,13 +454,13 @@ def mock_config():
     """プロパティ付きモックを作る。"""
     config = Mock()
     type(config).debug = PropertyMock(return_value=True)
-    type(config).api_key = PropertyMock(return_value="test-key")
+    type(config).api_key = PropertyMock(return_value="テストキー")
     return config
 
 def test_with_mock_config(mock_config):
     """モックした config プロパティでテストする。"""
     assert mock_config.debug is True
-    assert mock_config.api_key == "test-key"
+    assert mock_config.api_key == "テストキー"
 ```
 
 ## 非同期コードのテスト
@@ -527,8 +527,8 @@ def test_divide_by_zero():
 
 def test_custom_exception():
     """メッセージ付きのカスタム例外をテストする。"""
-    with pytest.raises(ValueError, match="invalid input"):
-        validate_input("invalid")
+with pytest.raises(ValueError, match="無効な入力"):
+    validate_input("無効")
 ```
 
 ### 例外属性のテスト

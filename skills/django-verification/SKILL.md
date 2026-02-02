@@ -155,7 +155,7 @@ python -c "from django.core.cache import cache; cache.set('test', 'value', 10); 
 
 ```bash
 # Django Debug Toolbar の出力（N+1 クエリ確認）
-# DEBUG=True の dev で起動しページにアクセス
+# DEBUG=True の開発環境で起動しページにアクセス
 # SQL パネルの重複クエリを確認
 
 # クエリ数の分析
@@ -198,20 +198,20 @@ python manage.py shell << EOF
 from django.conf import settings
 import os
 
-# Basic checks
+# 基本チェック
 print(f"DEBUG: {settings.DEBUG}")
 print(f"ALLOWED_HOSTS: {settings.ALLOWED_HOSTS}")
 print(f"DATABASES: {settings.DATABASES}")
 print(f"CACHES: {settings.CACHES}")
 
-# Security checks
+# セキュリティチェック
 print(f"SECRET_KEY set: {bool(settings.SECRET_KEY)}")
 print(f"SECURE_SSL_REDIRECT: {settings.SECURE_SSL_REDIRECT}")
 print(f"SESSION_COOKIE_SECURE: {settings.SESSION_COOKIE_SECURE}")
 print(f"CSRF_COOKIE_SECURE: {settings.CSRF_COOKIE_SECURE}")
 print(f"HSTS: {settings.SECURE_HSTS_SECONDS}")
 
-# Environment checks
+# 環境チェック
 print(f"Environment: {os.environ.get('ENVIRONMENT', 'unknown')}")
 EOF
 ```
@@ -240,19 +240,19 @@ python manage.py check --deploy
 ## 出力テンプレート
 
 ```
-VERIFICATION REPORT
+検証レポート
 ===================
-Environment: [PASS/FAIL]
-Quality:     [PASS/FAIL] (mypy/ruff/black)
-Migrations:  [PASS/FAIL]
-Tests:       [PASS/FAIL] (X/Y passed, Z% coverage)
-Security:    [PASS/FAIL] (CVE findings: N)
-Performance: [PASS/FAIL]
-Deploy:      [PASS/FAIL]
+環境:        [PASS/FAIL]
+品質:        [PASS/FAIL] (mypy/ruff/black)
+マイグレーション: [PASS/FAIL]
+テスト:      [PASS/FAIL] (X/Y passed, Z% coverage)
+セキュリティ: [PASS/FAIL] (CVE findings: N)
+パフォーマンス: [PASS/FAIL]
+デプロイ:    [PASS/FAIL]
 
-Overall:     [READY / NOT READY]
+総合:        [READY / NOT READY]
 
-Issues to Fix:
+修正すべき問題:
 1. ...
 2. ...
 ```

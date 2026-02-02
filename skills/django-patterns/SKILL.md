@@ -25,10 +25,10 @@ myproject/
 │   ├── __init__.py
 │   ├── settings/
 │   │   ├── __init__.py
-│   │   ├── base.py          # Base 設定
-│   │   ├── development.py   # Dev 設定
-│   │   ├── production.py    # Production 設定
-│   │   └── test.py          # Test 設定
+│   │   ├── base.py          # 基本設定
+│   │   ├── development.py   # 開発設定
+│   │   ├── production.py    # 本番設定
+│   │   └── test.py          # テスト設定
 │   ├── urls.py
 │   ├── wsgi.py
 │   └── asgi.py
@@ -128,7 +128,7 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-# Logging
+# ログ設定
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -328,7 +328,7 @@ class ProductSerializer(serializers.ModelSerializer):
     def validate_price(self, value):
         """価格が 0 未満でないことを保証する。"""
         if value < 0:
-            raise serializers.ValidationError("Price cannot be negative.")
+            raise serializers.ValidationError("価格は負にできない。")
         return value
 
 class ProductCreateSerializer(serializers.ModelSerializer):
@@ -342,7 +342,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         """複数フィールドに対するカスタム検証。"""
         if data['price'] > 10000 and data['stock'] > 100:
             raise serializers.ValidationError(
-                "Cannot have high-value products with large stock."
+                "高額商品と大量在庫を同時に設定できない。"
             )
         return data
 
@@ -365,7 +365,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """パスワードが一致することを検証する。"""
         if data['password'] != data['password_confirm']:
             raise serializers.ValidationError({
-                "password_confirm": "Password fields didn't match."
+                "password_confirm": "パスワードが一致しない。"
             })
         return data
 
@@ -457,7 +457,7 @@ def add_to_cart(request):
         product = Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         return Response(
-            {'error': 'Product not found'},
+            {'error': '商品が見つからない。'},
             status=status.HTTP_404_NOT_FOUND
         )
 
@@ -468,7 +468,7 @@ def add_to_cart(request):
         quantity=quantity
     )
 
-    return Response({'message': 'Added to cart'}, status=status.HTTP_201_CREATED)
+    return Response({'message': 'カートに追加した。'}, status=status.HTTP_201_CREATED)
 ```
 
 ## サービス層パターン

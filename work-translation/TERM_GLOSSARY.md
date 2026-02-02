@@ -114,17 +114,17 @@
 - build: ビルド
 - fixture: フィクスチャ
 - mock: モック
-- mocking: モック
+- mocking: モック化
 - parametrization: パラメータ化
 - serializer: シリアライザ
 - view: ビュー
 - viewset: ViewSet
 - model: モデル
 - migration: マイグレーション
-- linting: lint
-- formatting: フォーマット
+- linting: lint 作業
+- formatting: フォーマット作業
 - deploy: デプロイ
-- deployment: デプロイ
+- deployment: デプロイメント
 - permission: パーミッション
 - role: ロール
 - csrf: CSRF

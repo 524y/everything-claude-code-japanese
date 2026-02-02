@@ -138,8 +138,8 @@ class Post(models.Model):
 
     class Meta:
         permissions = [
-            ('can_publish', 'Can publish posts'),
-            ('can_edit_others', 'Can edit posts of others'),
+            ('can_publish', '投稿を公開できる'),
+            ('can_edit_others', '他人の投稿を編集できる'),
         ]
 
     def user_can_edit(self, user):
@@ -200,9 +200,9 @@ from django.contrib.auth.models import AbstractUser, Group
 
 class User(AbstractUser):
     ROLE_CHOICES = [
-        ('admin', 'Administrator'),
-        ('moderator', 'Moderator'),
-        ('user', 'Regular User'),
+        ('admin', '管理者'),
+        ('moderator', 'モデレーター'),
+        ('user', '一般ユーザー'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
 
@@ -230,7 +230,7 @@ class AdminRequiredMixin:
 ```python
 # GOOD: Django ORM はパラメータを自動でエスケープする
 def get_user(username):
-    return User.objects.get(username=username)  # Safe
+    return User.objects.get(username=username)  # 安全
 
 # GOOD: raw() でパラメータを使う
 def search_users(query):
@@ -238,12 +238,12 @@ def search_users(query):
 
 # BAD: ユーザー入力の直接埋め込みは厳禁
 def get_user_bad(username):
-    return User.objects.raw(f'SELECT * FROM users WHERE username = {username}')  # VULNERABLE!
+    return User.objects.raw(f'SELECT * FROM users WHERE username = {username}')  # 脆弱!
 
 # GOOD: filter と適切なエスケープ
 
 def get_users_by_email(email):
-    return User.objects.filter(email__iexact=email)  # Safe
+    return User.objects.filter(email__iexact=email)  # 安全
 
 # GOOD: 複雑クエリは Q オブジェクト
 from django.db.models import Q
@@ -251,7 +251,7 @@ def search_users_complex(query):
     return User.objects.filter(
         Q(username__icontains=query) |
         Q(email__icontains=query)
-    )  # Safe
+    )  # 安全
 ```
 
 ### raw() 追加対策
@@ -294,7 +294,7 @@ from django.utils.html import escape
 # BAD: エスケープせずに safe を付ける
 
 def render_bad(user_input):
-    return mark_safe(user_input)  # VULNERABLE!
+    return mark_safe(user_input)  # 脆弱!
 
 # GOOD: エスケープしてから safe を付ける
 
@@ -400,13 +400,13 @@ def validate_file_extension(value):
     ext = os.path.splitext(value.name)[1]
     valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.pdf']
     if not ext.lower() in valid_extensions:
-        raise ValidationError('Unsupported file extension.')
+        raise ValidationError('未対応の拡張子である。')
 
 def validate_file_size(value):
     """ファイルサイズを検証する (最大 5MB)。"""
     filesize = value.size
     if filesize > 5 * 1024 * 1024:
-        raise ValidationError('File too large. Max size is 5MB.')
+        raise ValidationError('ファイルが大きすぎる。最大 5MB。')
 
 # models.py
 class Document(models.Model):
@@ -483,7 +483,7 @@ from rest_framework.permissions import IsAuthenticated
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def protected_view(request):
-    return Response({'message': 'You are authenticated'})
+    return Response({'message': '認証済みである。'})
 ```
 
 ## セキュリティヘッダー

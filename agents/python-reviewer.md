@@ -38,7 +38,7 @@ model: opus
   # Good
   clean_path = os.path.normpath(user_path)
   if clean_path.startswith(".."):
-      raise ValueError("Invalid path")
+      raise ValueError("無効なパス")
   safe_path = os.path.join(base_dir, clean_path)
   ```
 
@@ -62,7 +62,7 @@ model: opus
   try:
       process()
   except ValueError as e:
-      logger.error(f"Invalid value: {e}")
+      logger.error(f"無効な値: {e}")
   ```
 
 - **Swallowing Exceptions**: 例外の黙殺
@@ -77,7 +77,7 @@ model: opus
   # Good
   with open("file.txt") as f:
       data = f.read()
-  # or
+  # または
   f = open("file.txt")
   try:
       data = f.read()

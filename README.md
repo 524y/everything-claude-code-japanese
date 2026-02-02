@@ -96,7 +96,7 @@ cp -r everything-claude-code/rules/* ~/.claude/rules/
 
 ```bash
 # コマンドを試す
-/plan "Add user authentication"
+/plan "ユーザー認証を追加"
 
 # 利用可能なコマンドを確認
 /plugin list everything-claude-code@everything-claude-code
@@ -415,12 +415,12 @@ cp -r everything-claude-code/skills/* ~/.claude/skills/
 ```markdown
 ---
 name: code-reviewer
-description: Reviews code for quality, security, and maintainability
+description: 品質、セキュリティ、保守性をレビューする
 tools: ["Read", "Grep", "Glob", "Bash"]
 model: opus
 ---
 
-You are a senior code reviewer...
+あなたは品質、セキュリティ、保守性を担保するシニア コードレビュアーである。
 ```
 
 ### Skills
@@ -428,13 +428,13 @@ You are a senior code reviewer...
 スキルはコマンドやエージェントから呼び出されるワークフロー定義である:
 
 ```markdown
-# TDD Workflow
+# TDD ワークフロー
 
-1. Define interfaces first
-2. Write failing tests (RED)
-3. Implement minimal code (GREEN)
-4. Refactor (IMPROVE)
-5. Verify 80%+ coverage
+1. まずインターフェースを定義する
+2. 失敗するテストを書く (RED)
+3. 最小実装で通す (GREEN)
+4. リファクタする (IMPROVE)
+5. 80%+ カバレッジを検証する
 ```
 
 ### Hooks
@@ -446,7 +446,7 @@ You are a senior code reviewer...
   "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\.(ts|tsx|js|jsx)$\"",
   "hooks": [{
     "type": "command",
-    "command": "#!/bin/bash\ngrep -n 'console\\.log' \"$file_path\" && echo '[Hook] Remove console.log' >&2"
+    "command": "#!/bin/bash\ngrep -n 'console\\.log' \"$file_path\" && echo '[Hook] console.log を削除する' >&2"
   }]
 }
 ```
@@ -457,9 +457,9 @@ You are a senior code reviewer...
 
 ```
 ~/.claude/rules/
-  security.md      # No hardcoded secrets
-  coding-style.md  # Immutability, file limits
-  testing.md       # TDD, coverage requirements
+  security.md      # シークレットのハードコード禁止
+  coding-style.md  # 不変性、ファイル制限
+  testing.md       # TDD、カバレッジ要件
 ```
 
 ---
@@ -554,4 +554,4 @@ MIT - 自由に利用できる。必要に応じて修正し、可能ならコ�
 
 ---
 
-**Star してほしい。両方のガイドを読み、最高のものを作る。**
+**役立つならこのリポジトリに Star を付けてほしい。両方のガイドを読み、最高のものを作る。**
