@@ -92,3 +92,8 @@
 - sandbox: サンドボックス
 - token economics: トークン経済
 - context rot: コンテキスト劣化
+- schema: スキーマ
+- pull request: プルリクエスト
+- release: リリース
+- maintenance: メンテナンス
+- ci/cd: CI / CD
