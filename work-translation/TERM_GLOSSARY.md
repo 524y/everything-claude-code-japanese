@@ -112,3 +112,24 @@
 - optional: Optional
 - static analysis: 静的解析
 - build: ビルド
+- fixture: フィクスチャ
+- mock: モック
+- mocking: モック
+- parametrization: パラメータ化
+- serializer: シリアライザ
+- view: ビュー
+- viewset: ViewSet
+- model: モデル
+- migration: マイグレーション
+- linting: lint
+- formatting: フォーマット
+- deploy: デプロイ
+- deployment: デプロイ
+- permission: パーミッション
+- role: ロール
+- csrf: CSRF
+- xss: XSS
+- orm: ORM
+- api: API
+- request: リクエスト
+- response: レスポンス
