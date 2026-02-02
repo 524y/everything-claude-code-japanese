@@ -8,7 +8,7 @@ const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { execSync, spawn } = require('child_process');
+const { spawn } = require('child_process');
 
 // Test helper
 function test(name, fn) {
@@ -110,30 +110,35 @@ async function runTests() {
   })) passed++; else failed++;
 
   if (await asyncTest('creates or updates session file', async () => {
-    // Run the script
+    // スクリプトを実行する
     await runScript(path.join(scriptsDir, 'session-end.js'));
 
-    // Check if session file was created (default session ID)
-    // Use local time to match the script's getDateString() function
+    // セッション ファイルが作成されたか確認する
+    // 注意: CLAUDE_SESSION_ID がない場合はプロジェクト名にフォールバックする (default ではない)
+    // スクリプトの getDateString() に合わせてローカル時刻を使う
     const sessionsDir = path.join(os.homedir(), '.claude', 'sessions');
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    const sessionFile = path.join(sessionsDir, `${today}-default-session.tmp`);
 
-    assert.ok(fs.existsSync(sessionFile), 'Session file should exist');
+    // 期待するセッション ID を取得する（プロジェクト名へのフォールバック）
+    const utils = require('../../scripts/lib/utils');
+    const expectedId = utils.getSessionIdShort();
+    const sessionFile = path.join(sessionsDir, `${today}-${expectedId}-session.tmp`);
+
+    assert.ok(fs.existsSync(sessionFile), `Session file should exist: ${sessionFile}`);
   })) passed++; else failed++;
 
   if (await asyncTest('includes session ID in filename', async () => {
     const testSessionId = 'test-session-abc12345';
     const expectedShortId = 'abc12345'; // Last 8 chars
 
-    // Run with custom session ID
+    // カスタム セッション ID で実行する
     await runScript(path.join(scriptsDir, 'session-end.js'), '', {
       CLAUDE_SESSION_ID: testSessionId
     });
 
-    // Check if session file was created with session ID
-    // Use local time to match the script's getDateString() function
+    // セッション ID を含むファイルが作成されたか確認する
+    // スクリプトの getDateString() に合わせてローカル時刻を使う
     const sessionsDir = path.join(os.homedir(), '.claude', 'sessions');
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -296,7 +301,7 @@ async function runTests() {
       }
     };
 
-    for (const [eventType, hookArray] of Object.entries(hooks.hooks)) {
+    for (const [, hookArray] of Object.entries(hooks.hooks)) {
       checkHooks(hookArray);
     }
   })) passed++; else failed++;
@@ -320,7 +325,7 @@ async function runTests() {
       }
     };
 
-    for (const [eventType, hookArray] of Object.entries(hooks.hooks)) {
+    for (const [, hookArray] of Object.entries(hooks.hooks)) {
       checkHooks(hookArray);
     }
   })) passed++; else failed++;
