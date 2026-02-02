@@ -189,25 +189,53 @@ everything-claude-code/
 
 ## エコシステムツール
 
-### ecc.tools - Skill Creator
+### Skill Creator
 
-リポジトリから Claude Code スキルを自動生成する。
+リポジトリから Claude Code のスキルを生成する方法は 2 つある。
 
-[Install GitHub App](https://github.com/apps/skill-creator) | [ecc.tools](https://ecc.tools)
+#### オプション A: ローカル解析（内蔵）
 
-リポジトリを解析し、次を作成する:
+外部サービスを使わずにローカル解析する場合は、`/skill-create` コマンドを使う。
+
+```bash
+/skill-create                    # 現在のリポジトリを解析
+/skill-create --instincts        # continuous-learning-v2 向けインスティンクトも生成
+```
+
+ローカルの git 履歴を解析し、SKILL.md ファイルを生成する。
+
+#### オプション B: GitHub App（高度）
+
+高度な機能（10k+ コミット、自動 PR、チーム共有など）が必要な場合:
+
+[GitHub App をインストール](https://github.com/apps/skill-creator) | [ecc.tools](https://ecc.tools)
+
+```bash
+# どの issue にもコメント可能
+/skill-creator analyze
+
+# または、デフォルト ブランチへの push で自動トリガー
+```
+
+どちらの方法でも次を作成する:
 - **SKILL.md files** - Claude Code ですぐ使えるスキル
 - **Instinct collections** - continuous-learning-v2 用
 - **Pattern extraction** - コミット履歴から学習する
 
-インスティンクト（instincts）は「いつ」「何をするか」を短いルールとして記録した行動パターンである。continuous-learning-v2 では、個人用（personal）と継承用（inherited）に分けて蓄積し、必要に応じてスキル / コマンド / エージェントへ進化させる。
+### Continuous Learning v2
+
+インスティンクト ベースの学習システムが、パターンを自動で学習する:
 
 ```bash
-# GitHub App をインストール後、スキルは次に生成される:
-~/.claude/skills/generated/
+/instinct-status        # 学習済みインスティンクトと信頼度を表示
+/instinct-import <file> # 他者のインスティンクトを取り込む
+/instinct-export        # インスティンクトを共有向けにエクスポート
+/evolve                 # 関連インスティンクトをスキルへまとめる
 ```
 
-継承された instincts のために、`continuous-learning-v2` スキルとシームレスに連携する。
+インスティンクト（instincts）は「いつ」「何をするか」を短いルールとして記録した行動パターンである。continuous-learning-v2 では、個人用（personal）と継承用（inherited）に分けて蓄積し、必要に応じてスキル / コマンド / エージェントへ進化させる。
+
+詳細は `skills/continuous-learning-v2/` を参照する。
 
 ---
 
