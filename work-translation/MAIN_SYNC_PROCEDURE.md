@@ -52,6 +52,7 @@ git merge --no-commit --no-ff <COMMIT>
 ```
 
 5) 翻訳反映（ルール追加込み）
+- 作業前に work-translation/WORK_INSTRUCTIONS.md を開き、特にコードブロック翻訳ルールを確認する
 - **/*.md / **/*.tmp は全文翻訳
 - **/*.js / **/*.sh / **/*.py はコメントのみ翻訳
 - **/*.json は description / comment / help / title / _comments の値のみ翻訳
@@ -61,6 +62,7 @@ git merge --no-commit --no-ff <COMMIT>
 - 英語以外は翻訳しない（例: 中国語ドキュメント）
 - 翻訳済みファイルは再翻訳しない（差分がある場合のみ追従）
 - 新しい用語が出たときは、どのように訳すか候補を提示して、確認待ちにする
+- 翻訳後に、Markdown のコードブロック内の自然言語が残っていないか確認する（原文維持が必要な識別子 / 固有名詞 / コマンド / パス / URL / ファイル名は除外）
 
 6) 進捗ファイル更新
 - TERM_GLOSSARY.md を更新
