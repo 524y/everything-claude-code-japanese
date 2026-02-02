@@ -4,3 +4,4 @@
 翻訳は Codex CLI を使って実施した。
 
 主な指示は `WORK_INSTRUCTIONS.md` を参照する。
+オリジナルの GitHub のコミットを取り込んで同期するための作業指示書は `MAIN_SYNC_PROCEDURE.md` を参照する。
