@@ -1,7 +1,7 @@
 {
   "name": "everything-claude-code",
-  "version": "1.0.0",
-  "description": "Anthropic のハッカソン受賞者による実戦で検証済みの Claude Code 設定の完全なコレクション - 10か月以上の集中的な日次利用を通じて進化したエージェント、スキル、フック、コマンド、ルール",
+  "version": "1.2.0",
+  "description": "Anthropic のハッカソン受賞者による実戦で検証済みの Claude Code 設定の完全なコレクション - 10 か月以上の集中的な日次利用を通じて進化したエージェント、スキル、フック、コマンド、ルール",
   "author": {
     "name": "Affaan Mustafa",
     "url": "https://x.com/affaanmustafa"
@@ -14,7 +14,6 @@
     "agents",
     "skills",
     "hooks",
-    "commands",
     "rules",
     "tdd",
     "code-review",
@@ -23,8 +22,7 @@
     "automation",
     "best-practices"
   ],
-  "commands": ["./commands/"],
-  "skills": ["./skills/"],
+  "skills": ["./skills/", "./commands/"],
   "agents": [
     "./agents/architect.md",
     "./agents/build-error-resolver.md",
