@@ -12,6 +12,11 @@
 ![Go](https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white)
 ![Markdown](https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white)
 
+<p align="left">
+  <span>日本語</span> |
+  <a href="README.zh-CN.md">简体中文</a>
+</p>
+
 **Anthropic のハッカソン優勝者による Claude Code 設定の完全版コレクションである。**
 
 実運用可能なエージェント、スキル、フック、コマンド、ルール、MCP 設定が、実際のプロダクト構築を 10 か月以上の日次の集中的な使用で進化したものである。
