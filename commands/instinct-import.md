@@ -38,40 +38,40 @@ python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <
 ## 取り込みプロセス
 
 ```
-📥 Importing instincts from: team-instincts.yaml
+📥 インスティンクトを取り込み中: team-instincts.yaml
 ================================================
 
-Found 12 instincts to import.
+取り込み対象のインスティンクトは 12 件。
 
-Analyzing conflicts...
+競合を解析中...
 
-## New Instincts (8)
-These will be added:
-  ✓ use-zod-validation (confidence: 0.7)
-  ✓ prefer-named-exports (confidence: 0.65)
-  ✓ test-async-functions (confidence: 0.8)
+## 新規インスティンクト (8)
+次を追加:
+  ✓ use-zod-validation (信頼度: 0.7)
+  ✓ prefer-named-exports (信頼度: 0.65)
+  ✓ test-async-functions (信頼度: 0.8)
   ...
 
-## Duplicate Instincts (3)
-Already have similar instincts:
+## 重複インスティンクト (3)
+既存と類似している:
   ⚠️ prefer-functional-style
-     Local: 0.8 confidence, 12 observations
-     Import: 0.7 confidence
-     → Keep local (higher confidence)
+     ローカル: 信頼度 0.8、観測 12 件
+     取り込み: 信頼度 0.7
+     → ローカルを維持（信頼度が高い）
 
   ⚠️ test-first-workflow
-     Local: 0.75 confidence
-     Import: 0.9 confidence
-     → Update to import (higher confidence)
+     ローカル: 信頼度 0.75
+     取り込み: 信頼度 0.9
+     → 取り込み版へ更新（信頼度が高い）
 
-## Conflicting Instincts (1)
-These contradict local instincts:
+## 競合インスティンクト (1)
+既存のインスティンクトと矛盾:
   ❌ use-classes-for-services
-     Conflicts with: avoid-classes
-     → Skip (requires manual resolution)
+     競合: avoid-classes
+     → スキップ（手動解決が必要）
 
 ---
-Import 8 new, update 1, skip 3?
+新規 8 件、更新 1 件、スキップ 3 件でよいか？
 ```
 
 ## マージ戦略
@@ -123,13 +123,13 @@ Skill Creator から取り込む場合:
 
 取り込み後:
 ```
-✅ Import complete!
+✅ 取り込み完了!
 
-Added: 8 instincts
-Updated: 1 instinct
-Skipped: 3 instincts (2 duplicates, 1 conflict)
+追加: 8 インスティンクト
+更新: 1 インスティンクト
+スキップ: 3 インスティンクト（重複 2 件、競合 1 件）
 
-New instincts saved to: ~/.claude/homunculus/instincts/inherited/
+新規インスティンクトの保存先: ~/.claude/homunculus/instincts/inherited/
 
-Run /instinct-status to see all instincts.
+/instinct-status を実行してすべてのインスティンクトを確認する。
 ```

@@ -58,25 +58,25 @@ git log --oneline -n 200 | cut -d' ' -f2- | head -50
 ```markdown
 ---
 name: {repo-name}-patterns
-description: Coding patterns extracted from {repo-name}
+description: {repo-name} から抽出したコーディング パターン
 version: 1.0.0
 source: local-git-analysis
 analyzed_commits: {count}
 ---
 
-# {Repo Name} Patterns
+# {Repo Name} パターン
 
-## Commit Conventions
-{detected commit message patterns}
+## コミット規約
+{検出したコミット メッセージのパターン}
 
-## Code Architecture
-{detected folder structure and organization}
+## コード アーキテクチャ
+{検出したフォルダ構造と整理方針}
 
-## Workflows
-{detected repeating file change patterns}
+## ワークフロー
+{検出した反復ファイル変更パターン}
 
-## Testing Patterns
-{detected test conventions}
+## テスト パターン
+{検出したテスト規約}
 ```
 
 ### ステップ 4: インスティンクト生成（--instincts 指定時）
@@ -86,20 +86,20 @@ continuous-learning-v2 連携用:
 ```yaml
 ---
 id: {repo}-commit-convention
-trigger: "when writing a commit message"
+trigger: "コミット メッセージを書くとき"
 confidence: 0.8
 domain: git
 source: local-repo-analysis
 ---
 
-# Use Conventional Commits
+# Conventional Commits を使う
 
-## Action
-Prefix commits with: feat:, fix:, chore:, docs:, test:, refactor:
+## アクション
+コミットの接頭辞に次を付ける: feat:, fix:, chore:, docs:, test:, refactor:
 
-## Evidence
-- Analyzed {n} commits
-- {percentage}% follow conventional commit format
+## エビデンス
+- {n} 件のコミットを分析
+- {percentage}% が conventional commit 形式に一致
 ```
 
 ## 出力例
@@ -109,50 +109,50 @@ TypeScript プロジェクトで `/skill-create` を実行した場合:
 ```markdown
 ---
 name: my-app-patterns
-description: Coding patterns from my-app repository
+description: my-app リポジトリのコーディング パターン
 version: 1.0.0
 source: local-git-analysis
 analyzed_commits: 150
 ---
 
-# My App Patterns
+# My App パターン
 
-## Commit Conventions
+## コミット規約
 
-This project uses **conventional commits**:
-- `feat:` - New features
-- `fix:` - Bug fixes
-- `chore:` - Maintenance tasks
-- `docs:` - Documentation updates
+このプロジェクトは **conventional commits** を使う:
+- `feat:` - 新機能
+- `fix:` - バグ修正
+- `chore:` - 保守作業
+- `docs:` - ドキュメント更新
 
-## Code Architecture
+## コード アーキテクチャ
 
 ```
 src/
-├── components/     # React components (PascalCase.tsx)
-├── hooks/          # Custom hooks (use*.ts)
-├── utils/          # Utility functions
-├── types/          # TypeScript type definitions
-└── services/       # API and external services
+├── components/     # React コンポーネント（PascalCase.tsx）
+├── hooks/          # カスタム hooks（use*.ts）
+├── utils/          # ユーティリティ関数
+├── types/          # TypeScript 型定義
+└── services/       # API と外部サービス
 ```
 
-## Workflows
+## ワークフロー
 
-### Adding a New Component
-1. Create `src/components/ComponentName.tsx`
-2. Add tests in `src/components/__tests__/ComponentName.test.tsx`
-3. Export from `src/components/index.ts`
+### 新規コンポーネントの追加
+1. `src/components/ComponentName.tsx` を作成
+2. `src/components/__tests__/ComponentName.test.tsx` にテストを追加
+3. `src/components/index.ts` から export
 
-### Database Migration
-1. Modify `src/db/schema.ts`
-2. Run `pnpm db:generate`
-3. Run `pnpm db:migrate`
+### データベース移行
+1. `src/db/schema.ts` を修正
+2. `pnpm db:generate` を実行
+3. `pnpm db:migrate` を実行
 
-## Testing Patterns
+## テスト パターン
 
-- Test files: `__tests__/` directories or `.test.ts` suffix
-- Coverage target: 80%+
-- Framework: Vitest
+- テスト ファイル: `__tests__/` ディレクトリまたは `.test.ts` 接尾辞
+- カバレッジ 目標: 80%+
+- フレームワーク: Vitest
 ```
 
 ## GitHub App 連携

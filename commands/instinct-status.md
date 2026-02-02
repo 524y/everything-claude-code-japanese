@@ -32,42 +32,42 @@ python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py status
 ## 出力フォーマット
 
 ```
-📊 Instinct Status
+📊 インスティンクト ステータス
 ==================
 
-## Code Style (4 instincts)
+## コードスタイル（4 インスティンクト）
 
 ### prefer-functional-style
-Trigger: when writing new functions
-Action: Use functional patterns over classes
-Confidence: ████████░░ 80%
-Source: session-observation | Last updated: 2025-01-22
+トリガー: 新しい関数を書くとき
+アクション: クラスではなく関数型パターンを使う
+信頼度: ████████░░ 80%
+ソース: session-observation | 最終更新: 2025-01-22
 
 ### use-path-aliases
-Trigger: when importing modules
-Action: Use @/ path aliases instead of relative imports
-Confidence: ██████░░░░ 60%
-Source: repo-analysis (github.com/acme/webapp)
+トリガー: モジュールをインポートするとき
+アクション: 相対 import ではなく @/ パス エイリアスを使う
+信頼度: ██████░░░░ 60%
+ソース: repo-analysis (github.com/acme/webapp)
 
-## Testing (2 instincts)
+## テスト（2 インスティンクト）
 
 ### test-first-workflow
-Trigger: when adding new functionality
-Action: Write test first, then implementation
-Confidence: █████████░ 90%
-Source: session-observation
+トリガー: 新しい機能を追加するとき
+アクション: テストを先に書き、次に実装する
+信頼度: █████████░ 90%
+ソース: session-observation
 
-## Workflow (3 instincts)
+## ワークフロー（3 インスティンクト）
 
 ### grep-before-edit
-Trigger: when modifying code
-Action: Search with Grep, confirm with Read, then Edit
-Confidence: ███████░░░ 70%
-Source: session-observation
+トリガー: コードを変更するとき
+アクション: Grep で検索し、Read で確認してから Edit する
+信頼度: ███████░░░ 70%
+ソース: session-observation
 
 ---
-Total: 9 instincts (4 personal, 5 inherited)
-Observer: Running (last analysis: 5 min ago)
+合計: 9 インスティンクト（personal 4 件、inherited 5 件）
+Observer: 稼働中（最終解析: 5 min 前）
 ```
 
 ## フラグ

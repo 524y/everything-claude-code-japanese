@@ -85,40 +85,40 @@ python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py evolve [
 ## 出力フォーマット
 
 ```
-🧬 Evolve Analysis
+🧬 Evolve 分析
 ==================
 
-Found 3 clusters ready for evolution:
+進化対象のクラスターを 3 件検出:
 
-## Cluster 1: Database Migration Workflow
-Instincts: new-table-migration, update-schema, regenerate-types
-Type: Command
-Confidence: 85% (based on 12 observations)
+## クラスター 1: データベース移行ワークフロー
+インスティンクト: new-table-migration, update-schema, regenerate-types
+タイプ: Command
+信頼度: 85%（12 件の観測に基づく）
 
-Would create: /new-table command
-Files:
+作成予定: /new-table コマンド
+ファイル:
   - ~/.claude/homunculus/evolved/commands/new-table.md
 
-## Cluster 2: Functional Code Style
-Instincts: prefer-functional, use-immutable, avoid-classes, pure-functions
-Type: Skill
-Confidence: 78% (based on 8 observations)
+## クラスター 2: 関数型コードスタイル
+インスティンクト: prefer-functional, use-immutable, avoid-classes, pure-functions
+タイプ: Skill
+信頼度: 78%（8 件の観測に基づく）
 
-Would create: functional-patterns skill
-Files:
+作成予定: functional-patterns スキル
+ファイル:
   - ~/.claude/homunculus/evolved/skills/functional-patterns.md
 
-## Cluster 3: Debugging Process
-Instincts: debug-check-logs, debug-isolate, debug-reproduce, debug-verify
-Type: Agent
-Confidence: 72% (based on 6 observations)
+## クラスター 3: デバッグ プロセス
+インスティンクト: debug-check-logs, debug-isolate, debug-reproduce, debug-verify
+タイプ: Agent
+信頼度: 72%（6 件の観測に基づく）
 
-Would create: debugger agent
-Files:
+作成予定: debugger エージェント
+ファイル:
   - ~/.claude/homunculus/evolved/agents/debugger.md
 
 ---
-Run `/evolve --execute` to create these files.
+これらのファイルを作成するには `/evolve --execute` を実行する。
 ```
 
 ## フラグ
@@ -135,7 +135,7 @@ Run `/evolve --execute` to create these files.
 ```markdown
 ---
 name: new-table
-description: Create a new database table with migration, schema update, and type generation
+description: 新しいデータベース テーブルを作成し、マイグレーション / スキーマ更新 / 型生成を実行
 command: /new-table
 evolved_from:
   - new-table-migration
@@ -143,11 +143,11 @@ evolved_from:
   - regenerate-types
 ---
 
-# New Table Command
+# New Table コマンド
 
-[Generated content based on clustered instincts]
+[クラスター化されたインスティンクトに基づき生成された内容]
 
-## Steps
+## 手順
 1. ...
 2. ...
 ```
@@ -156,23 +156,23 @@ evolved_from:
 ```markdown
 ---
 name: functional-patterns
-description: Enforce functional programming patterns
+description: 関数型プログラミング パターンを強制
 evolved_from:
   - prefer-functional
   - use-immutable
   - avoid-classes
 ---
 
-# Functional Patterns Skill
+# Functional Patterns スキル
 
-[Generated content based on clustered instincts]
+[クラスター化されたインスティンクトに基づき生成された内容]
 ```
 
 ### Agent
 ```markdown
 ---
 name: debugger
-description: Systematic debugging agent
+description: 体系的なデバッグ エージェント
 model: sonnet
 evolved_from:
   - debug-check-logs
@@ -180,7 +180,7 @@ evolved_from:
   - debug-reproduce
 ---
 
-# Debugger Agent
+# Debugger エージェント
 
-[Generated content based on clustered instincts]
+[クラスター化されたインスティンクトに基づき生成された内容]
 ```

@@ -35,10 +35,10 @@ command: /instinct-export
 YAML ファイルを作成:
 
 ```yaml
-# Instincts Export
-# Generated: 2025-01-22
-# Source: personal
-# Count: 12 instincts
+# Instincts エクスポート
+# 生成日: 2025-01-22
+# ソース: personal
+# 件数: 12 インスティンクト
 
 version: "2.0"
 exported_by: "continuous-learning-v2"
@@ -46,22 +46,22 @@ export_date: "2025-01-22T10:30:00Z"
 
 instincts:
   - id: prefer-functional-style
-    trigger: "when writing new functions"
-    action: "Use functional patterns over classes"
+    trigger: "新しい関数を書くとき"
+    action: "クラスではなく関数型パターンを使う"
     confidence: 0.8
     domain: code-style
     observations: 8
 
   - id: test-first-workflow
-    trigger: "when adding new functionality"
-    action: "Write test first, then implementation"
+    trigger: "新しい機能を追加するとき"
+    action: "テストを先に書き、次に実装する"
     confidence: 0.9
     domain: testing
     observations: 12
 
   - id: grep-before-edit
-    trigger: "when modifying code"
-    action: "Search with Grep, confirm with Read, then Edit"
+    trigger: "コードを変更するとき"
+    action: "Grep で検索し、Read で確認してから Edit する"
     confidence: 0.7
     domain: workflow
     observations: 6
