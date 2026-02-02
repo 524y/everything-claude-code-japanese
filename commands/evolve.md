@@ -1,22 +1,29 @@
 ---
 name: evolve
 description: 関連するインスティンクトを skills / commands / agents にまとめる
-command: /evolve
-implementation: python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py evolve
+command: true
 ---
 
 # Evolve コマンド
 
 ## 実装
 
+プラグイン ルート パスを使って instinct CLI を実行する:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" evolve [--generate]
+```
+
+`CLAUDE_PLUGIN_ROOT` が未設定の場合（手動インストール時）は次を使う:
+
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py evolve [--generate]
 ```
 
 インスティンクトを分析し、関連するものを上位構造へまとめる:
-- **Commands**: ユーザーが明示的に呼び出す行動を表す場合
-- **Skills**: 自動トリガーされる振る舞いを表す場合
-- **Agents**: 複雑で多段のプロセスを表す場合
+- **コマンド**: ユーザーが明示的に呼び出す行動を表す場合
+- **スキル**: 自動トリガーされる振る舞いを表す場合
+- **エージェント**: 複雑で多段のプロセスを表す場合
 
 ## 使用方法
 

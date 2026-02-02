@@ -1,16 +1,23 @@
 ---
 name: instinct-import
 description: チームメイト、Skill Creator、または他ソースからインスティンクトを取り込む
-command: /instinct-import
-implementation: python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <file>
+command: true
 ---
 
 # Instinct Import コマンド
 
 ## 実装
 
+プラグイン ルート パスを使って instinct CLI を実行する:
+
 ```bash
-python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
+```
+
+`CLAUDE_PLUGIN_ROOT` が未設定の場合（手動インストール時）は次を使う:
+
+```bash
+python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <file-or-url>
 ```
 
 取り込み対象:
