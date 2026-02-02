@@ -1,6 +1,6 @@
 /**
- * Claude Code のフックとスクリプト向けクロスプラットフォームユーティリティ
- * Windows, macOS, Linux で動作する
+ * Claude Code の hooks / scripts 向けクロスプラットフォーム ユーティリティ関数
+ * Windows / macOS / Linux で動作する
  */
 
 const fs = require('fs');
@@ -14,42 +14,42 @@ const isMacOS = process.platform === 'darwin';
 const isLinux = process.platform === 'linux';
 
 /**
- * ユーザーのホームディレクトリを取得する (クロスプラットフォーム)
+ * ユーザーのホームディレクトリを取得（クロスプラットフォーム）
  */
 function getHomeDir() {
   return os.homedir();
 }
 
 /**
- * Claude の設定ディレクトリを取得する
+ * Claude 設定ディレクトリを取得
  */
 function getClaudeDir() {
   return path.join(getHomeDir(), '.claude');
 }
 
 /**
- * セッションディレクトリを取得する
+ * セッション ディレクトリを取得
  */
 function getSessionsDir() {
   return path.join(getClaudeDir(), 'sessions');
 }
 
 /**
- * 学習済みスキルのディレクトリを取得する
+ * 学習済みスキル ディレクトリを取得
  */
 function getLearnedSkillsDir() {
   return path.join(getClaudeDir(), 'skills', 'learned');
 }
 
 /**
- * temp ディレクトリを取得する (クロスプラットフォーム)
+ * 一時ディレクトリを取得（クロスプラットフォーム）
  */
 function getTempDir() {
   return os.tmpdir();
 }
 
 /**
- * ディレクトリの存在を保証する (なければ作成)
+ * ディレクトリの存在を保証（なければ作成）
  */
 function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) {
@@ -59,7 +59,7 @@ function ensureDir(dirPath) {
 }
 
 /**
- * 現在日付を YYYY-MM-DD 形式で取得する
+ * 現在日付を YYYY-MM-DD 形式で取得
  */
 function getDateString() {
   const now = new Date();
@@ -70,7 +70,7 @@ function getDateString() {
 }
 
 /**
- * 現在時刻を HH:MM 形式で取得する
+ * 現在時刻を HH:MM 形式で取得
  */
 function getTimeString() {
   const now = new Date();
@@ -80,20 +80,37 @@ function getTimeString() {
 }
 
 /**
- * CLAUDE_SESSION_ID 環境変数から短いセッション ID を取得する
- * 簡潔で一意性を保つため末尾 8 文字を返す
- * @param {string} fallback - セッション ID がない場合のフォールバック値 (default: 'default')
+ * git リポジトリ名を取得
  */
-function getSessionIdShort(fallback = 'default') {
-  const sessionId = process.env.CLAUDE_SESSION_ID;
-  if (!sessionId || sessionId.length === 0) {
-    return fallback;
-  }
-  return sessionId.slice(-8);
+function getGitRepoName() {
+  const result = runCommand('git rev-parse --show-toplevel');
+  if (!result.success) return null;
+  return path.basename(result.output);
 }
 
 /**
- * 現在日時を YYYY-MM-DD HH:MM:SS 形式で取得する
+ * git リポジトリまたはカレントディレクトリからプロジェクト名を取得
+ */
+function getProjectName() {
+  const repoName = getGitRepoName();
+  if (repoName) return repoName;
+  return path.basename(process.cwd()) || null;
+}
+
+/**
+ * CLAUDE_SESSION_ID 環境変数から短いセッション ID を取得
+ * 末尾 8 文字を返し、プロジェクト名、最後に 'default' へフォールバックする
+ */
+function getSessionIdShort(fallback = 'default') {
+  const sessionId = process.env.CLAUDE_SESSION_ID;
+  if (sessionId && sessionId.length > 0) {
+    return sessionId.slice(-8);
+  }
+  return getProjectName() || fallback;
+}
+
+/**
+ * 現在日時を YYYY-MM-DD HH:MM:SS 形式で取得
  */
 function getDateTimeString() {
   const now = new Date();
@@ -107,9 +124,9 @@ function getDateTimeString() {
 }
 
 /**
- * ディレクトリ内のパターン一致ファイルを探す (find のクロスプラットフォーム代替)
+ * ディレクトリ内でパターンに一致するファイルを検索（find のクロスプラットフォーム代替）
  * @param {string} dir - 検索するディレクトリ
- * @param {string} pattern - ファイルパターン (例: "*.tmp", "*.md")
+ * @param {string} pattern - ファイル パターン（例: "*.tmp", "*.md"）
  * @param {object} options - オプション { maxAge: days, recursive: boolean }
  */
 function findFiles(dir, pattern, options = {}) {
@@ -155,14 +172,14 @@ function findFiles(dir, pattern, options = {}) {
 
   searchDir(dir);
 
-  // 更新時刻でソートする (新しい順)
+  // 更新時刻でソート（新しい順）
   results.sort((a, b) => b.mtime - a.mtime);
 
   return results;
 }
 
 /**
- * stdin から JSON を読み込む (フック入力用)
+ * stdin から JSON を読み込む（フック入力用）
  */
 async function readStdinJson() {
   return new Promise((resolve, reject) => {
@@ -190,14 +207,14 @@ async function readStdinJson() {
 }
 
 /**
- * stderr へログ出力する (Claude Code でユーザーに見える)
+ * stderr にログ出力（Claude Code で表示される）
  */
 function log(message) {
   console.error(message);
 }
 
 /**
- * stdout へ出力する (Claude に返る)
+ * stdout に出力（Claude へ返却される）
  */
 function output(data) {
   if (typeof data === 'object') {
@@ -208,7 +225,7 @@ function output(data) {
 }
 
 /**
- * テキストファイルを安全に読む
+ * テキストファイルを安全に読み込む
  */
 function readFile(filePath) {
   try {
@@ -219,7 +236,7 @@ function readFile(filePath) {
 }
 
 /**
- * テキストファイルを書く
+ * テキストファイルを書き込む
  */
 function writeFile(filePath, content) {
   ensureDir(path.dirname(filePath));
@@ -235,18 +252,18 @@ function appendFile(filePath, content) {
 }
 
 /**
- * コマンドが PATH に存在するか確認する
- * コマンドインジェクション防止のため execFileSync を使う
+ * PATH にコマンドが存在するか確認
+ * コマンドインジェクションを防ぐため execFileSync を使用
  */
 function commandExists(cmd) {
-  // コマンド名を検証する - 英数字、ハイフン、アンダースコア、ドットのみ許可
+  // コマンド名を検証 - 英数字 / ハイフン / アンダースコア / ドットのみ許可
   if (!/^[a-zA-Z0-9_.-]+$/.test(cmd)) {
     return false;
   }
 
   try {
     if (isWindows) {
-      // シェル補間を避けるために spawnSync を使う
+      // シェル補間を避けるため spawnSync を使用
       const result = spawnSync('where', [cmd], { stdio: 'pipe' });
       return result.status === 0;
     } else {
@@ -259,13 +276,13 @@ function commandExists(cmd) {
 }
 
 /**
- * コマンドを実行して出力を返す
+ * コマンドを実行し、出力を返す
  *
- * セキュリティ注記: この関数はシェルコマンドを実行する。信頼できる
- * ハードコードされたコマンドのみ使う。ユーザー入力を直接渡さない。
- * ユーザー入力には引数配列付きの spawnSync を使う。
+ * SECURITY NOTE: この関数はシェルコマンドを実行する。信頼できるハードコード済みのコマンドにのみ使うこと。
+ * ユーザーが制御する入力を直接渡してはいけない。
+ * ユーザー入力には、引数配列付きの spawnSync を使うこと。
  *
- * @param {string} cmd - 実行するコマンド (信頼済み / ハードコード済み)
+ * @param {string} cmd - 実行するコマンド（信頼済み / ハードコード前提）
  * @param {object} options - execSync オプション
  */
 function runCommand(cmd, options = {}) {
@@ -282,14 +299,14 @@ function runCommand(cmd, options = {}) {
 }
 
 /**
- * 現在のディレクトリが git リポジトリか確認する
+ * カレントディレクトリが git リポジトリか確認
  */
 function isGitRepo() {
   return runCommand('git rev-parse --git-dir').success;
 }
 
 /**
- * git の変更済みファイルを取得する
+ * git の変更ファイルを取得
  */
 function getGitModifiedFiles(patterns = []) {
   if (!isGitRepo()) return [];
@@ -312,7 +329,7 @@ function getGitModifiedFiles(patterns = []) {
 }
 
 /**
- * ファイル内のテキストを置換する (クロスプラットフォーム sed 代替)
+ * ファイル内のテキストを置換（sed のクロスプラットフォーム代替）
  */
 function replaceInFile(filePath, search, replace) {
   const content = readFile(filePath);
@@ -336,7 +353,7 @@ function countInFile(filePath, pattern) {
 }
 
 /**
- * ファイル内のパターンを検索し、行番号付きで一致行を返す
+ * ファイル内のパターンを検索し、行番号付きで返す
  */
 function grepFile(filePath, pattern) {
   const content = readFile(filePath);
@@ -373,7 +390,11 @@ module.exports = {
   getDateString,
   getTimeString,
   getDateTimeString,
+
+  // セッション / プロジェクト
   getSessionIdShort,
+  getGitRepoName,
+  getProjectName,
 
   // ファイル操作
   findFiles,
@@ -384,7 +405,7 @@ module.exports = {
   countInFile,
   grepFile,
 
-  // フック I/O
+  // フック入出力
   readStdinJson,
   log,
   output,
