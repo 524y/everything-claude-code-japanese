@@ -118,6 +118,43 @@ Claude プラグイン マニフェスト バリデーションは**厳格で強
 
 ---
 
+## `hooks` フィールド: 追加禁止
+
+> ⚠️ **重要:** `plugin.json` に `"hooks"` フィールドを追加しないこと。リグレッション テストで強制される。
+
+### 重要な理由
+
+Claude Code v2.1+ は、インストールされたプラグインの `hooks/hooks.json` を慣例で**自動読み込み**する。`plugin.json` にも宣言すると次のエラーになる:
+
+```
+Duplicate hooks file detected: ./hooks/hooks.json resolves to already-loaded file.
+The standard hooks/hooks.json is loaded automatically, so manifest.hooks should
+only reference additional hook files.
+```
+
+### 繰り返しの追加 / 削除の履歴
+
+このリポジトリでは修正 / リバートのループが発生している:
+
+| Commit | Action | Trigger |
+|--------|--------|---------|
+| `22ad036` | ADD hooks | Users reported "hooks not loading" |
+| `a7bc5f2` | REMOVE hooks | Users reported "duplicate hooks error" (#52) |
+| `779085e` | ADD hooks | Users reported "agents not loading" (#88) |
+| `e3a1306` | REMOVE hooks | Users reported "duplicate hooks error" (#103) |
+
+**根本原因:** Claude Code CLI の挙動がバージョン間で変化した:
+- v2.1 前: `hooks` の明示宣言が必須
+- v2.1+: 慣例で自動読み込みし、重複はエラー
+
+### 現行ルール（テストで強制）
+
+`tests/hooks/hooks.test.js` の `plugin.json does NOT have explicit hooks declaration` テストが再導入を防ぐ。
+
+**追加の hook ファイル** ( `hooks/hooks.json` 以外 ) を追加する場合は宣言できるが、標準の `hooks/hooks.json` は宣言してはならない。
+
+---
+
 ## 既知の避けるべきパターン
 
 見た目は正しいが拒否される:
@@ -127,6 +164,7 @@ Claude プラグイン マニフェスト バリデーションは**厳格で強
 * `version` の欠落
 * 推論されたパスへの依存
 * マーケットプレイスの挙動がローカル検証と一致する前提
+* **`"hooks": "./hooks/hooks.json"` を追加する** - 慣例で自動読み込みされるため重複エラーになる
 
 小細工は避ける。明示的にする。
 
@@ -147,6 +185,8 @@ Claude プラグイン マニフェスト バリデーションは**厳格で強
 ```
 
 この構造は Claude プラグイン バリデーションに対して検証済み。
+
+**Important:** Notice there is NO `"hooks"` field. The `hooks/hooks.json` file is loaded automatically by convention. Adding it explicitly causes a duplicate error.
 
 ---
 
