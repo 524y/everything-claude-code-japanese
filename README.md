@@ -32,18 +32,18 @@
 <tr>
 <td width="50%">
 <a href="https://x.com/affaanmustafa/status/2012378465664745795">
-<img src="https://github.com/user-attachments/assets/1a471488-59cc-425b-8345-5245c7efbcef" alt="The Shorthand Guide to Everything Claude Code" />
+<img src="https://github.com/user-attachments/assets/1a471488-59cc-425b-8345-5245c7efbcef" alt="Everything Claude Code ショートフォームガイド" />
 </a>
 </td>
 <td width="50%">
 <a href="https://x.com/affaanmustafa/status/2014040193557471352">
-<img src="https://github.com/user-attachments/assets/c9ca43bc-b149-427f-b551-af6840c368f0" alt="The Longform Guide to Everything Claude Code" />
+<img src="https://github.com/user-attachments/assets/c9ca43bc-b149-427f-b551-af6840c368f0" alt="Everything Claude Code ロングフォームガイド" />
 </a>
 </td>
 </tr>
 <tr>
-<td align="center"><b>Shorthand Guide</b><br/>セットアップ、基礎、思想。<b>まずこれを読むこと。</b></td>
-<td align="center"><b>Longform Guide</b><br/>トークン最適化、メモリ永続化、評価、並列化。</td>
+<td align="center"><b>ショートフォームガイド</b><br/>セットアップ、基礎、思想。<b>まずこれを読むこと。</b></td>
+<td align="center"><b>ロングフォームガイド</b><br/>トークン最適化、メモリ永続化、評価、並列化。</td>
 </tr>
 </table>
 
@@ -120,14 +120,14 @@ everything-claude-code/
 |   |-- coding-standards/           # 言語のベストプラクティス
 |   |-- backend-patterns/           # API、データベース、キャッシュパターン
 |   |-- frontend-patterns/          # React、Next.js パターン
-|   |-- continuous-learning/        # セッションからの自動抽出 (Longform Guide)
+|   |-- continuous-learning/        # セッションからの自動抽出 (ロングフォームガイド)
 |   |-- continuous-learning-v2/     # 信頼度スコア付きの Instinct ベース学習
 |   |-- iterative-retrieval/        # サブエージェントの段階的コンテキスト精錬
-|   |-- strategic-compact/          # 手動コンパクション提案 (Longform Guide)
+|   |-- strategic-compact/          # 手動コンパクション提案 (ロングフォームガイド)
 |   |-- tdd-workflow/               # TDD 手法
 |   |-- security-review/            # セキュリティチェックリスト
-|   |-- eval-harness/               # 検証ループ評価 (Longform Guide)
-|   |-- verification-loop/          # 継続的検証 (Longform Guide)
+|   |-- eval-harness/               # 検証ループ評価 (ロングフォームガイド)
+|   |-- verification-loop/          # 継続的検証 (ロングフォームガイド)
 |   |-- golang-patterns/            # Go イディオムとベストプラクティス (NEW)
 |   |-- golang-testing/             # Go テストパターン、TDD、ベンチマーク (NEW)
 |
@@ -138,9 +138,9 @@ everything-claude-code/
 |   |-- code-review.md      # /code-review - 品質レビュー
 |   |-- build-fix.md        # /build-fix - ビルドエラー修正
 |   |-- refactor-clean.md   # /refactor-clean - デッドコード削除
-|   |-- learn.md            # /learn - セッション中のパターン抽出 (Longform Guide)
-|   |-- checkpoint.md       # /checkpoint - 検証状態の保存 (Longform Guide)
-|   |-- verify.md           # /verify - 検証ループの実行 (Longform Guide)
+|   |-- learn.md            # /learn - セッション中のパターン抽出 (ロングフォームガイド)
+|   |-- checkpoint.md       # /checkpoint - 検証状態の保存 (ロングフォームガイド)
+|   |-- verify.md           # /verify - 検証ループの実行 (ロングフォームガイド)
 |   |-- setup-pm.md         # /setup-pm - パッケージマネージャー設定
 |   |-- go-review.md        # /go-review - Go コードレビュー (NEW)
 |   |-- go-test.md          # /go-test - Go TDD ワークフロー (NEW)
@@ -156,8 +156,8 @@ everything-claude-code/
 |
 |-- hooks/            # トリガー型の自動化
 |   |-- hooks.json                # フック設定一式 (PreToolUse、PostToolUse、Stop など)
-|   |-- memory-persistence/       # セッションライフサイクルフック (Longform Guide)
-|   |-- strategic-compact/        # コンパクション提案 (Longform Guide)
+|   |-- memory-persistence/       # セッションライフサイクルフック (ロングフォームガイド)
+|   |-- strategic-compact/        # コンパクション提案 (ロングフォームガイド)
 |
 |-- scripts/          # クロスプラットフォーム Node.js スクリプト (NEW)
 |   |-- lib/                     # 共通ユーティリティ
@@ -176,7 +176,7 @@ everything-claude-code/
 |   |-- hooks/                   # フックテスト
 |   |-- run-all.js               # 全テスト実行
 |
-|-- contexts/         # 動的 system prompt 注入コンテキスト (Longform Guide)
+|-- contexts/         # 動的 system prompt 注入コンテキスト (ロングフォームガイド)
 |   |-- dev.md              # 開発モードコンテキスト
 |   |-- review.md           # レビューモードコンテキスト
 |   |-- research.md         # 調査/探索モードコンテキスト
@@ -490,8 +490,8 @@ node tests/hooks/hooks.test.js
 
 ## リンク
 
-- **Shorthand Guide（開始はこちら）:** [The Shorthand Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2012378465664745795)
-- **Longform Guide（上級）:** [The Longform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2014040193557471352)
+- **ショートフォームガイド（開始はこちら）:** [The Shortform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2012378465664745795)
+- **ロングフォームガイド（上級）:** [The Longform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2014040193557471352)
 - **Follow:** [@affaanmustafa](https://x.com/affaanmustafa)
 - **zenith.chat:** [zenith.chat](https://zenith.chat)
 

@@ -85,7 +85,7 @@
 - pipeline: パイプライン
 - longform: ロングフォーム
 - shortform: ショートフォーム
-- shorthand: ショートハンド
+- shorthand: ショートフォーム
 - worktree: ワークツリー
 - parallelization: 並列化
 - fork: フォーク
