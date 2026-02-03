@@ -133,3 +133,4 @@
 - api: API
 - request: リクエスト
 - response: レスポンス
+- alias: エイリアス
