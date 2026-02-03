@@ -35,6 +35,13 @@ function getSessionsDir() {
 }
 
 /**
+ * セッション エイリアスのファイルパスを取得する
+ */
+function getAliasesPath() {
+  return path.join(getClaudeDir(), 'session-aliases.json');
+}
+
+/**
  * 学習済みスキルのディレクトリを取得する
  */
 function getLearnedSkillsDir() {
@@ -382,6 +389,7 @@ module.exports = {
   getHomeDir,
   getClaudeDir,
   getSessionsDir,
+  getAliasesPath,
   getLearnedSkillsDir,
   getTempDir,
   ensureDir,
