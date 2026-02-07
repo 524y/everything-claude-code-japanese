@@ -1,0 +1,302 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "small_model": "anthropic/claude-haiku-4-5",
+  "default_agent": "build",
+  "instructions": [
+    "CONTRIBUTING.md",
+    ".opencode/instructions/INSTRUCTIONS.md",
+    "skills/tdd-workflow/SKILL.md",
+    "skills/security-review/SKILL.md",
+    "skills/coding-standards/SKILL.md"
+  ],
+  "plugin": [
+    "./.opencode/plugins"
+  ],
+  "agent": {
+    "build": {
+      "description": "開発作業向けのメインコーディングエージェント",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-5",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "read": true
+      }
+    },
+    "planner": {
+      "description": "複雑な機能やリファクタ向けの計画専門エージェント。実装計画、設計変更、大規模リファクタで使用する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/planner.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "architect": {
+      "description": "システム設計、スケーラビリティ、技術判断に特化したソフトウェアアーキテクチャ専門エージェント。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/architect.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "code-reviewer": {
+      "description": "コード品質・セキュリティ・保守性をレビューする専門エージェント。コードの作成直後または変更直後に使用する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/code-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "security-reviewer": {
+      "description": "セキュリティ脆弱性の検出と修正に特化したエージェント。ユーザー入力・認証・API エンドポイント・機密データを扱うコードの作成後に使用する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/security-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": true,
+        "edit": true
+      }
+    },
+    "tdd-guide": {
+      "description": "テスト先行の TDD を徹底するエージェント。新機能開発、バグ修正、リファクタ時に使用し、80% 以上のテストカバレッジを確保する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/tdd-guide.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "build-error-resolver": {
+      "description": "ビルドと TypeScript エラー解消に特化したエージェント。ビルド失敗や型エラー発生時に使用し、最小差分で修正する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/build-error-resolver.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "e2e-runner": {
+      "description": "Playwright を使った E2E テスト専門エージェント。重要ユーザーフローのテストを作成・保守・実行する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/e2e-runner.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "doc-updater": {
+      "description": "ドキュメントと codemap 更新に特化したエージェント。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/doc-updater.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "refactor-cleaner": {
+      "description": "デッドコード整理と統合に特化したエージェント。未使用コード削除、重複解消、リファクタで使用する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/refactor-cleaner.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "go-reviewer": {
+      "description": "Go のイディオム、並行処理、エラーハンドリング、性能に特化した Go コードレビュー専門エージェント。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/go-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "go-build-resolver": {
+      "description": "Go の build / vet / コンパイルエラー解消に特化したエージェント。最小変更でビルドエラーを修正する。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/go-build-resolver.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "database-reviewer": {
+      "description": "クエリ最適化、スキーマ設計、セキュリティ、性能に対応する PostgreSQL 専門エージェント。Supabase のベストプラクティスを取り入れる。",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:.opencode/prompts/agents/database-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "command": {
+    "plan": {
+      "description": "複雑な機能向けの詳細な実装計画を作成する",
+      "template": "{file:.opencode/commands/plan.md}\n\n$ARGUMENTS",
+      "agent": "planner",
+      "subtask": true
+    },
+    "tdd": {
+      "description": "80% 以上のテストカバレッジで TDD ワークフローを徹底する",
+      "template": "{file:.opencode/commands/tdd.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "code-review": {
+      "description": "品質・セキュリティ・保守性の観点でコードをレビューする",
+      "template": "{file:.opencode/commands/code-review.md}\n\n$ARGUMENTS",
+      "agent": "code-reviewer",
+      "subtask": true
+    },
+    "security": {
+      "description": "包括的なセキュリティレビューを実行する",
+      "template": "{file:.opencode/commands/security.md}\n\n$ARGUMENTS",
+      "agent": "security-reviewer",
+      "subtask": true
+    },
+    "build-fix": {
+      "description": "最小変更でビルドと TypeScript エラーを修正する",
+      "template": "{file:.opencode/commands/build-fix.md}\n\n$ARGUMENTS",
+      "agent": "build-error-resolver",
+      "subtask": true
+    },
+    "e2e": {
+      "description": "Playwright で E2E テストを生成・実行する",
+      "template": "{file:.opencode/commands/e2e.md}\n\n$ARGUMENTS",
+      "agent": "e2e-runner",
+      "subtask": true
+    },
+    "refactor-clean": {
+      "description": "デッドコードを削除し重複を統合する",
+      "template": "{file:.opencode/commands/refactor-clean.md}\n\n$ARGUMENTS",
+      "agent": "refactor-cleaner",
+      "subtask": true
+    },
+    "orchestrate": {
+      "description": "複雑なタスク向けに複数エージェントをオーケストレーションする",
+      "template": "{file:.opencode/commands/orchestrate.md}\n\n$ARGUMENTS",
+      "agent": "planner",
+      "subtask": true
+    },
+    "learn": {
+      "description": "セッションからパターンと学びを抽出する",
+      "template": "{file:.opencode/commands/learn.md}\n\n$ARGUMENTS"
+    },
+    "checkpoint": {
+      "description": "検証状態と進捗を保存する",
+      "template": "{file:.opencode/commands/checkpoint.md}\n\n$ARGUMENTS"
+    },
+    "verify": {
+      "description": "検証ループを実行する",
+      "template": "{file:.opencode/commands/verify.md}\n\n$ARGUMENTS"
+    },
+    "eval": {
+      "description": "基準に沿って評価を実行する",
+      "template": "{file:.opencode/commands/eval.md}\n\n$ARGUMENTS"
+    },
+    "update-docs": {
+      "description": "ドキュメントを更新する",
+      "template": "{file:.opencode/commands/update-docs.md}\n\n$ARGUMENTS",
+      "agent": "doc-updater",
+      "subtask": true
+    },
+    "update-codemaps": {
+      "description": "codemap を更新する",
+      "template": "{file:.opencode/commands/update-codemaps.md}\n\n$ARGUMENTS",
+      "agent": "doc-updater",
+      "subtask": true
+    },
+    "test-coverage": {
+      "description": "テストカバレッジを分析する",
+      "template": "{file:.opencode/commands/test-coverage.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "setup-pm": {
+      "description": "パッケージマネージャーを設定する",
+      "template": "{file:.opencode/commands/setup-pm.md}\n\n$ARGUMENTS"
+    },
+    "go-review": {
+      "description": "Go コードレビュー",
+      "template": "{file:.opencode/commands/go-review.md}\n\n$ARGUMENTS",
+      "agent": "go-reviewer",
+      "subtask": true
+    },
+    "go-test": {
+      "description": "Go TDD ワークフロー",
+      "template": "{file:.opencode/commands/go-test.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "go-build": {
+      "description": "Go ビルドエラーを修正する",
+      "template": "{file:.opencode/commands/go-build.md}\n\n$ARGUMENTS",
+      "agent": "go-build-resolver",
+      "subtask": true
+    },
+    "skill-create": {
+      "description": "git 履歴からスキルを生成する",
+      "template": "{file:.opencode/commands/skill-create.md}\n\n$ARGUMENTS"
+    },
+    "instinct-status": {
+      "description": "学習済みインスティンクトを表示する",
+      "template": "{file:.opencode/commands/instinct-status.md}\n\n$ARGUMENTS"
+    },
+    "instinct-import": {
+      "description": "インスティンクトを取り込む",
+      "template": "{file:.opencode/commands/instinct-import.md}\n\n$ARGUMENTS"
+    },
+    "instinct-export": {
+      "description": "インスティンクトを書き出す",
+      "template": "{file:.opencode/commands/instinct-export.md}\n\n$ARGUMENTS"
+    },
+    "evolve": {
+      "description": "インスティンクトをスキルにクラスタ化する",
+      "template": "{file:.opencode/commands/evolve.md}\n\n$ARGUMENTS"
+    }
+  },
+  "permission": {
+    "mcp_*": "ask"
+  }
+}

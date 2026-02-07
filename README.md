@@ -502,6 +502,106 @@ node tests/hooks/hooks.test.js
 
 ---
 
+## 🔌 OpenCode 対応
+
+ECC はプラグインとフックを含む **完全な OpenCode 対応** を提供する。
+
+### Quick Start
+
+```bash
+# OpenCode をインストール
+npm install -g opencode
+
+# リポジトリルートで実行
+opencode
+```
+
+設定は `.opencode/opencode.json` から自動検出される。
+
+### 機能互換
+
+| Feature | Claude Code | OpenCode | Status |
+|---------|-------------|----------|--------|
+| Agents | ✅ 12 agents | ✅ 12 agents | **完全互換** |
+| Commands | ✅ 23 commands | ✅ 24 commands | **完全互換** |
+| Skills | ✅ 16 skills | ✅ 16 skills | **完全互換** |
+| Hooks | ✅ 3 phases | ✅ 20+ events | **OpenCode の方が多い** |
+| Rules | ✅ 8 rules | ✅ 8 rules | **完全互換** |
+| MCP Servers | ✅ Full | ✅ Full | **完全互換** |
+| Custom Tools | ✅ Via hooks | ✅ Native support | **OpenCode が優位** |
+
+### Plugin 経由の Hook 対応
+
+OpenCode のプラグインシステムは Claude Code より高機能で、20+ のイベントタイプを提供する:
+
+| Claude Code Hook | OpenCode Plugin Event |
+|-----------------|----------------------|
+| PreToolUse | `tool.execute.before` |
+| PostToolUse | `tool.execute.after` |
+| Stop | `session.idle` |
+| SessionStart | `session.created` |
+| SessionEnd | `session.deleted` |
+
+**OpenCode の追加イベント**: `file.edited`, `file.watcher.updated`, `message.updated`, `lsp.client.diagnostics`, `tui.toast.show` など。
+
+### 利用可能コマンド（24）
+
+| Command | Description |
+|---------|-------------|
+| `/plan` | 実装計画を作成 |
+| `/tdd` | TDD ワークフローを強制 |
+| `/code-review` | コード変更をレビュー |
+| `/security` | セキュリティレビューを実行 |
+| `/build-fix` | ビルドエラーを修正 |
+| `/e2e` | E2E テストを生成 |
+| `/refactor-clean` | デッドコードを削除 |
+| `/orchestrate` | マルチエージェントワークフロー |
+| `/learn` | セッションからパターンを抽出 |
+| `/checkpoint` | 検証状態を保存 |
+| `/verify` | 検証ループを実行 |
+| `/eval` | 基準に対して評価 |
+| `/update-docs` | ドキュメントを更新 |
+| `/update-codemaps` | codemap を更新 |
+| `/test-coverage` | カバレッジを分析 |
+| `/go-review` | Go コードレビュー |
+| `/go-test` | Go TDD ワークフロー |
+| `/go-build` | Go ビルドエラー修正 |
+| `/skill-create` | git からスキル生成 |
+| `/instinct-status` | 学習済みインスティンクトを表示 |
+| `/instinct-import` | インスティンクトを取り込み |
+| `/instinct-export` | インスティンクトを書き出し |
+| `/evolve` | インスティンクトをスキルに昇格 |
+| `/setup-pm` | パッケージマネージャーを設定 |
+
+### プラグインの導入
+
+**Option 1: 直接利用**
+```bash
+cd everything-claude-code
+opencode
+```
+
+**Option 2: npm パッケージとして導入**
+```bash
+npm install opencode-ecc
+```
+
+`opencode.json` に追加する:
+```json
+{
+  "plugin": ["opencode-ecc"]
+}
+```
+
+### ドキュメント
+
+- **Migration Guide**: `.opencode/MIGRATION.md`
+- **OpenCode Plugin README**: `.opencode/README.md`
+- **Consolidated Rules**: `.opencode/instructions/INSTRUCTIONS.md`
+- **LLM Documentation**: `llms.txt`（OpenCode ドキュメント完全版）
+
+---
+
 ## 📖 背景
 
 私は実験的な公開以来 Claude Code を使っている。2025 年 9 月に [zenith.chat](https://zenith.chat) を [@DRodriguezFX](https://x.com/DRodriguezFX) と構築し、Anthropic x Forum Ventures ハッカソンで優勝した。完全に Claude Code を使っている。
