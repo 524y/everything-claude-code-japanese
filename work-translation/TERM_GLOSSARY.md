@@ -60,6 +60,7 @@
 - action: アクション
 - source: ソース
 - observer: オブザーバー
+- opencode: OpenCode
 - eval: eval
 - grader: グレーダー
 - benchmark: ベンチマーク
