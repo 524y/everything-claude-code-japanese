@@ -88,8 +88,13 @@
 # まずリポジトリを clone する
 git clone https://github.com/affaan-m/everything-claude-code.git
 
-# ルールをコピー（すべてのプロジェクトに適用）
-cp -r everything-claude-code/rules/* ~/.claude/rules/
+# common rules をコピー（必須）
+cp -r everything-claude-code/rules/common/* ~/.claude/rules/
+
+# 言語別 rules をコピー（利用スタックに合わせて選択）
+cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/
+cp -r everything-claude-code/rules/python/* ~/.claude/rules/
+cp -r everything-claude-code/rules/golang/* ~/.claude/rules/
 ```
 
 ### ステップ 3: 使い始める
@@ -199,13 +204,20 @@ everything-claude-code/
 |   |-- instinct-export.md  # /instinct-export - instinct のエクスポート (NEW)
 |   |-- evolve.md           # /evolve - instinct をスキルにクラスタリング (NEW)
 |
-|-- rules/            # 常に従うガイドライン ( ~/.claude/rules/ にコピー )
-|   |-- security.md         # 必須セキュリティチェック
-|   |-- coding-style.md     # 不変性、ファイル構成
-|   |-- testing.md          # TDD、80% カバレッジ要件
-|   |-- git-workflow.md     # コミット形式、PR プロセス
-|   |-- agents.md           # サブエージェントへ委任する条件
-|   |-- performance.md      # モデル選定、コンテキスト管理
+|-- rules/            # 常に従うガイドライン（ ~/.claude/rules/ にコピー）
+|   |-- README.md            # Structure overview and installation guide
+|   |-- common/              # Language-agnostic principles
+|   |   |-- coding-style.md    # Immutability, file organization
+|   |   |-- git-workflow.md    # Commit format, PR process
+|   |   |-- testing.md         # TDD, 80% coverage requirement
+|   |   |-- performance.md     # Model selection, context management
+|   |   |-- patterns.md        # Design patterns, skeleton projects
+|   |   |-- hooks.md           # Hook architecture, TodoWrite
+|   |   |-- agents.md          # When to delegate to subagents
+|   |   |-- security.md        # Mandatory security checks
+|   |-- typescript/          # TypeScript/JavaScript specific
+|   |-- python/              # Python specific
+|   |-- golang/              # Go specific
 |
 |-- hooks/            # トリガー型の自動化
 |   |-- hooks.json                # フック設定一式 (PreToolUse、PostToolUse、Stop など)
@@ -363,12 +375,16 @@ Duplicate hooks file detected: ./hooks/hooks.json resolves to already-loaded fil
 > # まずリポジトリを clone する
 > git clone https://github.com/affaan-m/everything-claude-code.git
 >
-> # 方法 A: ユーザーレベル ルール（全プロジェクトに適用）
-> cp -r everything-claude-code/rules/* ~/.claude/rules/
+> # 方法 A: ユーザーレベル rules（全プロジェクトに適用）
+> cp -r everything-claude-code/rules/common/* ~/.claude/rules/
+> cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/   # pick your stack
+> cp -r everything-claude-code/rules/python/* ~/.claude/rules/
+> cp -r everything-claude-code/rules/golang/* ~/.claude/rules/
 >
 > # 方法 B: プロジェクトレベル ルール（現在のプロジェクトのみ）
 > mkdir -p .claude/rules
-> cp -r everything-claude-code/rules/* .claude/rules/
+> cp -r everything-claude-code/rules/common/* .claude/rules/
+> cp -r everything-claude-code/rules/typescript/* .claude/rules/     # pick your stack
 > ```
 
 ---
@@ -384,8 +400,11 @@ git clone https://github.com/affaan-m/everything-claude-code.git
 # エージェントを Claude 設定にコピー
 cp everything-claude-code/agents/*.md ~/.claude/agents/
 
-# ルールをコピー
-cp everything-claude-code/rules/*.md ~/.claude/rules/
+# Copy rules (common + language-specific)
+cp -r everything-claude-code/rules/common/* ~/.claude/rules/
+cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/   # pick your stack
+cp -r everything-claude-code/rules/python/* ~/.claude/rules/
+cp -r everything-claude-code/rules/golang/* ~/.claude/rules/
 
 # コマンドをコピー
 cp everything-claude-code/commands/*.md ~/.claude/commands/
@@ -453,14 +472,17 @@ model: opus
 
 ### ルール
 
-ルールは常に従うガイドラインである。モジュール化を維持する:
+ルールは常に従うガイドラインであり、`common/`（言語非依存）と言語別ディレクトリで構成する:
 
 ```
-~/.claude/rules/
-  security.md      # ハードコードされたシークレットの禁止
-  coding-style.md  # 不変性、ファイル制限
-  testing.md       # TDD、カバレッジ要件
+rules/
+  common/          # Universal principles (always install)
+  typescript/      # TS/JS specific patterns and tools
+  python/          # Python specific patterns and tools
+  golang/          # Go specific patterns and tools
 ```
+
+See [`rules/README.md`](rules/README.md) for installation and structure details.
 
 ---
 
