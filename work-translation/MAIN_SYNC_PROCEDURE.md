@@ -6,18 +6,25 @@
 ## 前提
 - japanese は翻訳ブランチ
 - 基点は「japanese が main から最後に取り込んだ commit」
-- upstream は本家リポジトリ（初回追加は実行済みのため不要）
-- TERM_GLOSSARY.md / TRANSLATION_STATUS.md を更新する
+- upstream は本家リポジトリ（初回のみ追加が必要）
+- TERM_GLOSSARY.md を更新する（TRANSLATION_STATUS.md の更新は不要）
 
 ## A. 作業開始前（本家同期 / 作業ブランチ作成）
 
 あらかじめ、以下の作業を行っておく。
 
+- 作業ディレクトリ確認
+```bash
+git status --porcelain
+```
+- 出力が空でない場合は作業を中断し、ユーザーに確認する（Codex CLI で自動続行しない）
+
 - 本家同期
 ```bash
+git remote get-url upstream >/dev/null 2>&1 || git remote add upstream https://github.com/affaan-m/everything-claude-code.git
 git fetch upstream
 git checkout main
-git merge upstream/main
+git merge --ff-only upstream/main
 git push origin main
 ```
 
@@ -51,7 +58,13 @@ git log --oneline $BASE..main | tail -n 1
 git merge --no-commit --no-ff <COMMIT>
 ```
 
-5) 翻訳反映（ルール追加込み）
+5) conflict 対応（発生時のみ）
+- conflict が出たファイルを解消する
+- `git add <FILE>` で解消済みファイルを stage する
+- 作業を継続して翻訳反映を行う
+- 機械的に確定できない解消（どちらの内容を採用するかで意味が変わるもの）は、推測で決めずにユーザーへ確認する
+
+6) 翻訳反映（ルール追加込み）
 - 作業前に work-translation/WORK_INSTRUCTIONS.md を開き、特にコードブロック翻訳ルールを確認する
 - **/*.md / **/*.tmp は全文翻訳
 - **/*.js / **/*.sh / **/*.py はコメントのみ翻訳
@@ -63,29 +76,30 @@ git merge --no-commit --no-ff <COMMIT>
 - 翻訳済みファイルは再翻訳しない（差分がある場合のみ追従）
 - 新しい用語が出たときは、どのように訳すか候補を提示して、確認待ちにする
 - 翻訳後に、Markdown のコードブロック内の自然言語が残っていないか確認する（原文維持が必要な識別子 / 固有名詞 / コマンド / パス / URL / ファイル名は除外）
+- 既存訳と新規訳のどちらが妥当か判断が割れる場合は、推測で統一せずにユーザーへ確認する
 
-6) 進捗ファイル更新
+7) 進捗ファイル更新
 - TERM_GLOSSARY.md を更新
 - TRANSLATION_STATUS.md の更新は不要
 
-7) commit
+8) commit
 - コミットメッセージは「原文 + 日本語訳」
 例:
 ```
 feat: add new review flow / レビュー フローを追加
 ```
 
-8) 修正前後の日本語の確認
+9) 修正前後の日本語の確認
 - git show で修正前後を日本語を比較する
 - 修正前の日本語の方が妥当なものは、修正前の日本語の訳し方に見習って訳し直す
 - 新しい内容や、内容が修正されているものは、それらの変更点は削除しないこと
 - 最後に git commit --amend する
 
-9) コミット後の確認
+10) コミット後の確認
 - 人間が翻訳内容の確認（レビュー・確認）を行う
 - 問題があれば、作業を中止して、コミットを取り消して、削除する
 
-10) 作業継続の確認
+11) 作業継続の確認
 - ここで作業を中断して、継続可否を確認する。
 - 現在のコンテキスト量から「このまま継続が良いか / 新しいセッションが良いか」を提案する
 - 継続する場合は、B-2 から続ける
@@ -109,4 +123,9 @@ git merge --no-ff japanese-sync-main
 - push
 ```bash
 git push origin japanese
+```
+
+- 作業ブランチ削除（local）
+```bash
+git branch -d japanese-sync-main
 ```
