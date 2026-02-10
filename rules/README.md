@@ -25,14 +25,36 @@ rules/
 
 ## インストール
 
-```bash
-# common rules（全プロジェクトで必須）
-cp -r rules/common/* ~/.claude/rules/
+### Option 1: Install Script (Recommended)
 
-# 技術スタックに合わせて言語別 rules を導入
-cp -r rules/typescript/* ~/.claude/rules/
-cp -r rules/python/* ~/.claude/rules/
-cp -r rules/golang/* ~/.claude/rules/
+```bash
+# Install common + one or more language-specific rule sets
+./install.sh typescript
+./install.sh python
+./install.sh golang
+
+# Install multiple languages at once
+./install.sh typescript python
+```
+
+### Option 2: Manual Installation
+
+> **Important:** Copy entire directories — do NOT flatten with `/*`.
+> Common and language-specific directories contain files with the same names.
+> Flattening them into one directory causes language-specific files to overwrite
+> common rules, and breaks the relative `../common/` references used by
+> language-specific files.
+
+```bash
+# common rules を導入（全プロジェクトで必須）
+cp -r rules/common ~/.claude/rules/common
+
+# プロジェクトの技術スタックに合わせて言語別 rules を導入
+cp -r rules/typescript ~/.claude/rules/typescript
+cp -r rules/python ~/.claude/rules/python
+cp -r rules/golang ~/.claude/rules/golang
+
+# 注意: 必ず実プロジェクト要件に合わせて設定すること（ここでの例はあくまで参考）
 ```
 
 ## Rules と Skills の違い
