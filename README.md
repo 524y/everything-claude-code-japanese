@@ -587,6 +587,36 @@ node tests/hooks/hooks.test.js
 
 ---
 
+## Cursor IDE 対応
+
+ecc-universal には [Cursor IDE](https://cursor.com) 向けの事前変換済み設定が含まれる。`.cursor/` ディレクトリには Cursor 形式に合わせた rules、agents、skills、commands、MCP 設定が含まれる。
+
+### Quick Start（Cursor）
+
+```bash
+# パッケージをインストール
+npm install ecc-universal
+
+# 言語別にインストール
+./install.sh --target cursor typescript
+./install.sh --target cursor python golang
+```
+
+### 変換対象
+
+| Component | Claude Code → Cursor | Parity |
+|-----------|---------------------|--------|
+| Rules | YAML frontmatter 追加、パスをフラット化 | Full |
+| Agents | model ID を展開、tools を readonly フラグへ変換 | Full |
+| Skills | 変更不要（共通標準） | Identical |
+| Commands | パス参照更新、multi-* はスタブ化 | Partial |
+| MCP Config | 環境変数展開構文を更新 | Full |
+| Hooks | Cursor 側に同等機能なし | 代替手段あり |
+
+詳細は [.cursor/README.md](.cursor/README.md)、移行ガイドは [.cursor/MIGRATION.md](.cursor/MIGRATION.md) を参照すること。
+
+---
+
 ## 🔌 OpenCode 対応
 
 ECC はプラグインとフックを含む **完全な OpenCode 対応** を提供する。
@@ -668,13 +698,13 @@ opencode
 
 **Option 2: npm パッケージとして導入**
 ```bash
-npm install opencode-ecc
+npm install ecc-universal
 ```
 
 `opencode.json` に追加する:
 ```json
 {
-  "plugin": ["opencode-ecc"]
+  "plugin": ["ecc-universal"]
 }
 ```
 
