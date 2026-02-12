@@ -37,7 +37,7 @@ EOF",
 ```
 
 **Model Parameter Notes**:
-- `{{GEMINI_MODEL_FLAG}}`: `--backend gemini` のとき `--gemini-model gemini-3-pro-preview ` を指定（末尾スペース維持）。codex は空文字。
+- `{{GEMINI_MODEL_FLAG}}`: `--backend gemini` の場合 `--gemini-model gemini-3-pro-preview` を指定する（末尾に半角スペースが必要）。codex は空文字。
 
 **Role Prompts**:
 
