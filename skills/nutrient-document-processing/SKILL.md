@@ -9,7 +9,7 @@ description: Nutrient DWS API を使って、ドキュメントの処理、変�
 
 ## セットアップ
 
-無料の API キーを **https://dashboard.nutrient.io/sign_up/?product=processor** で取得する。
+無料の API キーを **[nutrient.io](https://dashboard.nutrient.io/sign_up/?product=processor)** で取得する。
 
 ```bash
 export NUTRIENT_API_KEY="pdf_live_..."

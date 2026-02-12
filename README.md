@@ -223,6 +223,7 @@ everything-claude-code/
 |   |-- verification-loop/          # Continuous verification (Longform Guide)
 |   |-- golang-patterns/            # Go idioms and best practices
 |   |-- golang-testing/             # Go testing patterns, TDD, benchmarks
+|   |-- cpp-testing/                # C++ テストパターン、GoogleTest、CMake / CTest（NEW）
 |   |-- django-patterns/            # Django patterns, models, views (NEW)
 |   |-- django-security/            # Django security best practices (NEW)
 |   |-- django-tdd/                 # Django TDD workflow (NEW)
@@ -234,6 +235,7 @@ everything-claude-code/
 |   |-- springboot-tdd/             # Spring Boot TDD (NEW)
 |   |-- springboot-verification/    # Spring Boot verification (NEW)
 |   |-- configure-ecc/              # Interactive installation wizard (NEW)
+|   |-- security-scan/              # AgentShield セキュリティ監査統合（NEW）
 |
 |-- commands/         # Slash commands for quick execution
 |   |-- tdd.md              # /tdd - Test-driven development
@@ -349,6 +351,28 @@ everything-claude-code/
 - **SKILL.md ファイル** - Claude Code 用にすぐ使えるスキル
 - **Instinct コレクション** - continuous-learning-v2 用
 - **パターン抽出** - コミット履歴から学習
+
+### AgentShield — セキュリティ監査
+
+```bash
+# クイックスキャン（インストール不要）
+npx ecc-agentshield scan
+
+# 安全な問題を自動修正
+npx ecc-agentshield scan --fix
+
+# Opus 4.6 による深い分析
+npx ecc-agentshield scan --opus --stream
+
+# セキュア設定をゼロから生成
+npx ecc-agentshield init
+```
+
+Claude Code 設定の脆弱性、設定ミス、インジェクションリスクをスキャンする。CLAUDE.md、settings.json、MCP servers、hooks、agent 定義を検査し、実行可能な findings とともにセキュリティグレード（A-F）を出力する。
+
+Claude Code では `/security-scan` で実行でき、CI には [GitHub Action](https://github.com/affaan-m/agentshield) を追加できる。
+
+[GitHub](https://github.com/affaan-m/agentshield) | [npm](https://www.npmjs.com/package/ecc-agentshield)
 
 ### 🧠 Continuous Learning v2
 
@@ -586,6 +610,36 @@ node tests/hooks/hooks.test.js
 
 ---
 
+## Cursor IDE 対応
+
+ecc-universal には [Cursor IDE](https://cursor.com) 向けの事前変換済み設定が含まれる。`.cursor/` ディレクトリには Cursor 形式に合わせた rules、agents、skills、commands、MCP 設定が含まれる。
+
+### Quick Start（Cursor）
+
+```bash
+# パッケージをインストール
+npm install ecc-universal
+
+# 言語別にインストール
+./install.sh --target cursor typescript
+./install.sh --target cursor python golang
+```
+
+### 変換対象
+
+| Component | Claude Code → Cursor | Parity |
+|-----------|---------------------|--------|
+| Rules | YAML frontmatter 追加、パスをフラット化 | Full |
+| Agents | model ID を展開、tools を readonly フラグへ変換 | Full |
+| Skills | 変更不要（共通標準） | Identical |
+| Commands | パス参照更新、multi-* はスタブ化 | Partial |
+| MCP Config | 環境変数展開構文を更新 | Full |
+| Hooks | Cursor 側に同等機能なし | 代替手段あり |
+
+詳細は [.cursor/README.md](.cursor/README.md)、移行ガイドは [.cursor/MIGRATION.md](.cursor/MIGRATION.md) を参照すること。
+
+---
+
 ## 🔌 OpenCode 対応
 
 ECC はプラグインとフックを含む **完全な OpenCode 対応** を提供する。
@@ -667,13 +721,13 @@ opencode
 
 **Option 2: npm パッケージとして導入**
 ```bash
-npm install opencode-ecc
+npm install ecc-universal
 ```
 
 `opencode.json` に追加する:
 ```json
 {
-  "plugin": ["opencode-ecc"]
+  "plugin": ["ecc-universal"]
 }
 ```
 
@@ -729,6 +783,7 @@ npm install opencode-ecc
 - **Longform Guide（上級）:** [The Longform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2014040193557471352)
 - **Follow:** [@affaanmustafa](https://x.com/affaanmustafa)
 - **zenith.chat:** [zenith.chat](https://zenith.chat)
+- **スキル ディレクトリ:** [awesome-agent-skills](https://github.com/JackyST0/awesome-agent-skills)
 
 ---
 
