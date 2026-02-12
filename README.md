@@ -235,6 +235,7 @@ everything-claude-code/
 |   |-- springboot-tdd/             # Spring Boot TDD (NEW)
 |   |-- springboot-verification/    # Spring Boot verification (NEW)
 |   |-- configure-ecc/              # Interactive installation wizard (NEW)
+|   |-- security-scan/              # AgentShield セキュリティ監査統合（NEW）
 |
 |-- commands/         # Slash commands for quick execution
 |   |-- tdd.md              # /tdd - Test-driven development
@@ -350,6 +351,28 @@ everything-claude-code/
 - **SKILL.md ファイル** - Claude Code 用にすぐ使えるスキル
 - **Instinct コレクション** - continuous-learning-v2 用
 - **パターン抽出** - コミット履歴から学習
+
+### AgentShield — セキュリティ監査
+
+```bash
+# クイックスキャン（インストール不要）
+npx ecc-agentshield scan
+
+# 安全な問題を自動修正
+npx ecc-agentshield scan --fix
+
+# Opus 4.6 による深い分析
+npx ecc-agentshield scan --opus --stream
+
+# セキュア設定をゼロから生成
+npx ecc-agentshield init
+```
+
+Claude Code 設定の脆弱性、設定ミス、インジェクションリスクをスキャンする。CLAUDE.md、settings.json、MCP servers、hooks、agent 定義を検査し、実行可能な findings とともにセキュリティグレード（A-F）を出力する。
+
+Claude Code では `/security-scan` で実行でき、CI には [GitHub Action](https://github.com/affaan-m/agentshield) を追加できる。
+
+[GitHub](https://github.com/affaan-m/agentshield) | [npm](https://www.npmjs.com/package/ecc-agentshield)
 
 ### 🧠 Continuous Learning v2
 

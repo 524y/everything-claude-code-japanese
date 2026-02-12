@@ -138,3 +138,5 @@
 - sanitizer: サニタイザー
 - death test: death test
 - fake: フェイク
+- finding: 指摘事項
+- severity: 重大度
