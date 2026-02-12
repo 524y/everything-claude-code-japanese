@@ -730,6 +730,7 @@ npm install opencode-ecc
 - **Longform Guide（上級）:** [The Longform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2014040193557471352)
 - **Follow:** [@affaanmustafa](https://x.com/affaanmustafa)
 - **zenith.chat:** [zenith.chat](https://zenith.chat)
+- **スキル ディレクトリ:** [awesome-agent-skills](https://github.com/JackyST0/awesome-agent-skills)
 
 ---
 
