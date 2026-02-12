@@ -135,3 +135,6 @@
 - request: リクエスト
 - response: レスポンス
 - alias: エイリアス
+- sanitizer: サニタイザー
+- death test: death test
+- fake: フェイク
