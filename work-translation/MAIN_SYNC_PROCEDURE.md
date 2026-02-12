@@ -42,21 +42,23 @@ git checkout -b japanese-sync-main
 BASE=$(git merge-base main japanese-sync-main)
 echo $BASE
 ```
+※ `BASE` は参照用とし、未処理コミットの件数算出には `japanese-sync-main..main` を使う。
 
 2) 対象コミットの件数確認
 ```bash
-git log --oneline $BASE..main | wc -l
+git log --oneline japanese-sync-main..main | wc -l
 ```
 
 3) 対象コミットの先頭を確認
 ```bash
-git log --oneline $BASE..main | tail -n 1
+git log --oneline japanese-sync-main..main | tail -n 1
 ```
 
 4) 対象コミットを取り込み
 ```bash
 git merge --no-commit --no-ff <COMMIT>
 ```
+- merge commit 取り込み時に差分が 0 の場合でも、履歴同期のために merge commit を作成して進める（意図が不明な場合はユーザーに確認する）
 
 5) conflict 対応（発生時のみ）
 - conflict が出たファイルを解消する
@@ -102,14 +104,14 @@ feat: add new review flow / レビュー フローを追加
 11) 作業継続の確認
 - ここで作業を中断して、継続可否を確認する。
 - 現在のコンテキスト量から「このまま継続が良いか / 新しいセッションが良いか」を提案する
+- 残件数確認は `git log --oneline japanese-sync-main..main | wc -l` を使う
 - 継続する場合は、B-2 から続ける
 
 ## C. japanese-sync-main を japanese に取り込む
 
 - 確認
 ```bash
-BASE=$(git merge-base main japanese)
-git range-diff $BASE..main $BASE..japanese-sync-main
+git range-diff japanese..main japanese..japanese-sync-main
 ```
 
 - 取り込み
