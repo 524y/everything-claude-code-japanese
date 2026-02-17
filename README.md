@@ -1,5 +1,10 @@
 # 非公式日本語訳 / Unofficial Japanese Translation
 
+> [!WARNING]
+> 本家リポジトリに日本語コンテンツが追加されました。
+> そのため、この非公式日本語 fork は **2026-02-24** に削除予定です。
+> 今後は本家リポジトリを利用してください: https://github.com/affaan-m/everything-claude-code
+
 - 元リポジトリ: https://github.com/affaan-m/everything-claude-code
 - 翻訳最終更新日: 2026-02-02
 
